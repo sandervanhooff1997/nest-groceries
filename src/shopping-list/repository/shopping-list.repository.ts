@@ -2,16 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ShoppingList, ShoppingListDocument } from '../schemas/shopping-list.schema';
-import { IShoppingList } from '../interfaces/shopping-list.interface';
+import { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
+import { ShoppingListEntity } from '../entities/shopping-list.entity';
 
 @Injectable()
-export class ShoppingListRepository {
+export class ShoppingListRepository implements IShoppingListRepository {
   constructor(
     @InjectModel(ShoppingList.name)
     private readonly shoppingListModel: Model<ShoppingListDocument>,
   ) {}
 
-  async create(shoppingList: IShoppingList): Promise<ShoppingListDocument> {
+  async create(shoppingList: ShoppingListEntity): Promise<ShoppingListDocument> {
     return this.shoppingListModel.create(shoppingList);
   }
 
@@ -25,7 +26,7 @@ export class ShoppingListRepository {
 
   async update(
     id: string,
-    shoppingList: Partial<IShoppingList>,
+    shoppingList: Partial<ShoppingListEntity>,
   ): Promise<ShoppingListDocument | null> {
     return this.shoppingListModel.findByIdAndUpdate(id, shoppingList, {
       new: true,

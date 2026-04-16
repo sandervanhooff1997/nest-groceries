@@ -7,38 +7,50 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ShoppingListService } from './services/shopping-list.service';
-import type { IShoppingList } from './interfaces/shopping-list.interface';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { ShoppingListEntity } from './entities/shopping-list.entity';
+import { CreateShoppingListCommand } from './commands/impl/create-shopping-list.command';
+import { UpdateShoppingListCommand } from './commands/impl/update-shopping-list.command';
+import { DeleteShoppingListCommand } from './commands/impl/delete-shopping-list.command';
+import { FindAllShoppingListsQuery } from './queries/impl/find-all-shopping-lists.query';
+import { FindShoppingListByIdQuery } from './queries/impl/find-shopping-list-by-id.query';
 
 @Controller('shopping-lists')
 export class ShoppingListController {
-  constructor(private readonly shoppingListService: ShoppingListService) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @Post()
-  create(@Body() shoppingList: IShoppingList) {
-    return this.shoppingListService.create(shoppingList);
+  async create(@Body() shoppingList: ShoppingListEntity) {
+    return await this.commandBus.execute(
+      new CreateShoppingListCommand(shoppingList),
+    );
   }
 
   @Get()
-  findAll() {
-    return this.shoppingListService.findAll();
+  async findAll() {
+    return await this.queryBus.execute(new FindAllShoppingListsQuery());
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.shoppingListService.findById(id);
+  async findById(@Param('id') id: string) {
+    return await this.queryBus.execute(new FindShoppingListByIdQuery(id));
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
-    @Body() shoppingList: Partial<IShoppingList>,
+    @Body() shoppingList: Partial<ShoppingListEntity>,
   ) {
-    return this.shoppingListService.update(id, shoppingList);
+    return await this.commandBus.execute(
+      new UpdateShoppingListCommand(id, shoppingList),
+    );
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.shoppingListService.delete(id);
+  async delete(@Param('id') id: string) {
+    return await this.commandBus.execute(new DeleteShoppingListCommand(id));
   }
 }
