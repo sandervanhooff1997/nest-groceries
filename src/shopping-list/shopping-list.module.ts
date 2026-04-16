@@ -6,7 +6,7 @@ import {
   ShoppingList,
   ShoppingListSchema,
 } from './schemas/shopping-list.schema';
-import { ShoppingListController } from './shopping-list.controller';
+import { ShoppingListController } from './controllers/shopping-list.controller';
 import { ShoppingListRepository } from './repositories/shopping-list.repository';
 import { IShoppingListRepository } from './constants/shopping-list.constants';
 

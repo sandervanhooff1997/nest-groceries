@@ -25,6 +25,9 @@ export class UpdateShoppingListHandler implements ICommandHandler<UpdateShopping
     console.log(
       `User ${command.user.fullName} (${command.user.email}) updated shopping list ${command.id}`,
     );
-    return await this.repository.update(command.id, command.shoppingList);
+    return await this.repository.update(command.id, {
+      ...command.shoppingList,
+      updatedBy: command.user._id.toString(),
+    });
   }
 }

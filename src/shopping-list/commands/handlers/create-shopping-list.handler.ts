@@ -24,6 +24,13 @@ export class CreateShoppingListHandler implements ICommandHandler<CreateShopping
     console.log(
       `User ${command.user.fullName} (${command.user.email}) created shopping list`,
     );
-    return await this.repository.create(command.shoppingList);
+    const userId = command.user._id.toString();
+    const shoppingList = new ShoppingListEntity({
+      ...command.shoppingList,
+      createdBy: userId,
+      updatedBy: userId,
+    });
+
+    return await this.repository.create(shoppingList);
   }
 }

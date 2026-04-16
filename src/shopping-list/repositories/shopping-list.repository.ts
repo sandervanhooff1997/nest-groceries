@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ShoppingList, ShoppingListDocument } from '../schemas/shopping-list.schema';
-import { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
-import { ShoppingListEntity } from '../entities/shopping-list.entity';
+import {
+  ShoppingList,
+  type ShoppingListDocument,
+} from '../schemas/shopping-list.schema';
+import type { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
+import type { ShoppingListEntity } from '../entities/shopping-list.entity';
 
 @Injectable()
 export class ShoppingListRepository implements IShoppingListRepository {
@@ -12,7 +15,9 @@ export class ShoppingListRepository implements IShoppingListRepository {
     private readonly shoppingListModel: Model<ShoppingListDocument>,
   ) {}
 
-  async create(shoppingList: ShoppingListEntity): Promise<ShoppingListDocument> {
+  async create(
+    shoppingList: ShoppingListEntity,
+  ): Promise<ShoppingListDocument> {
     return this.shoppingListModel.create(shoppingList);
   }
 
@@ -28,12 +33,15 @@ export class ShoppingListRepository implements IShoppingListRepository {
     id: string,
     shoppingList: Partial<ShoppingListEntity>,
   ): Promise<ShoppingListDocument | null> {
-    return this.shoppingListModel.findByIdAndUpdate(id, shoppingList, {
-      new: true,
-    });
+    return this.shoppingListModel
+      .findByIdAndUpdate(id, shoppingList, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
   }
 
   async delete(id: string): Promise<ShoppingListDocument | null> {
-    return this.shoppingListModel.findByIdAndDelete(id);
+    return this.shoppingListModel.findByIdAndDelete(id).exec();
   }
 }

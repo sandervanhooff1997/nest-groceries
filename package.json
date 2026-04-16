@@ -78,7 +78,7 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "{src,test}/**/*.ts": "eslint --max-warnings=0",
-    "*.{js,ts,mjs,cjs}": "eslint --max-warnings=0"
+    "{src,test}/**/*.ts": "eslint --fix --max-warnings=0",
+    "*.{js,ts,mjs,cjs}": "eslint --fix --max-warnings=0"
   }
 }
