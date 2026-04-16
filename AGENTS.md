@@ -9,6 +9,9 @@
 - Apply this preference consistently in NestJS dependency injection and similar constructor-based patterns.
 - Write clean code, prevent using comments as much as possible
 - Use descriptive variable and method names to enhance code readability and maintainability.
+- Seperate concerns by organizing code into modules, classes, and functions that have clear responsibilities.
+- Create enums for fixed sets of related constants to improve code clarity and reduce errors.
+- When creating file
 
 ### Preferred pattern
 

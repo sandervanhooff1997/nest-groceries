@@ -15,4 +15,4 @@ export class GroceryItem {
   purchased: boolean;
 }
 
-export const GroceryItemSchema = SchemaFactory.createForClass(GroceryItem);
+export const groceryItem = SchemaFactory.createForClass(GroceryItem);

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { GroceryItem, GroceryItemSchema } from './grocery-item.schema';
+import { GroceryItem, groceryItem } from './grocery-item.schema';
 
 export type ShoppingListDocument = HydratedDocument<ShoppingList>;
 
@@ -9,7 +9,7 @@ export class ShoppingList {
   @Prop({ required: true, trim: true })
   name: string;
 
-  @Prop({ type: [GroceryItemSchema], default: [] })
+  @Prop({ type: [groceryItem], default: [] })
   items: GroceryItem[];
 
   @Prop({ required: true, trim: true })
@@ -25,4 +25,4 @@ export class ShoppingList {
   updatedAt?: Date;
 }
 
-export const ShoppingListSchema = SchemaFactory.createForClass(ShoppingList);
+export const shoppingList = SchemaFactory.createForClass(ShoppingList);

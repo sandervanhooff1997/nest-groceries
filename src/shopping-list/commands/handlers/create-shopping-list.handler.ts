@@ -2,13 +2,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
-import { ShoppingListEntity } from '../../entities/shopping-list.entity';
+import { ShoppingList } from '../../entities/shopping-list.entity';
 import type { IAuditable } from '../../../shared/interfaces/auditable.interface';
 import type { User } from '../../../shared/entities/user.entity';
 
 export class CreateShoppingListCommand implements IAuditable {
   constructor(
-    public readonly shoppingList: ShoppingListEntity,
+    public readonly shoppingList: ShoppingList,
     public readonly user: User,
   ) {}
 }
@@ -25,7 +25,7 @@ export class CreateShoppingListHandler implements ICommandHandler<CreateShopping
       `User ${command.user.fullName} (${command.user.email}) created shopping list`,
     );
     const userId = command.user._id.toString();
-    const shoppingList = new ShoppingListEntity({
+    const shoppingList = new ShoppingList({
       ...command.shoppingList,
       createdBy: userId,
       updatedBy: userId,

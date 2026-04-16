@@ -2,10 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CqrsModule } from '@nestjs/cqrs';
 import { SharedModule } from '../shared/shared.module';
-import {
-  ShoppingList,
-  ShoppingListSchema,
-} from './schemas/shopping-list.schema';
+import { ShoppingList, shoppingList } from './schemas/shopping-list.schema';
 import { ShoppingListController } from './controllers/shopping-list.controller';
 import { ShoppingListRepository } from './repositories/shopping-list.repository';
 import { IShoppingListRepository } from './constants/shopping-list.constants';
@@ -35,7 +32,7 @@ const queryHandlers = [
     CqrsModule,
     SharedModule,
     MongooseModule.forFeature([
-      { name: ShoppingList.name, schema: ShoppingListSchema },
+      { name: ShoppingList.name, schema: shoppingList },
     ]),
   ],
   controllers: [ShoppingListController],
