@@ -4,17 +4,13 @@ import { SHOPPING_LIST_REPOSITORY } from '../../constants/shopping-list.constant
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
 import { ShoppingListEntity } from '../../entities/shopping-list.entity';
 import type { IAuditable } from '../../../shared/interfaces/auditable.interface';
-import { User } from '../../../shared/entities/user.entity';
+import type { User } from '../../../shared/entities/user.entity';
 
 export class CreateShoppingListCommand implements IAuditable {
-  user: User;
-
   constructor(
     public readonly shoppingList: ShoppingListEntity,
-    user: User,
-  ) {
-    this.user = user;
-  }
+    public readonly user: User,
+  ) {}
 }
 
 @CommandHandler(CreateShoppingListCommand)

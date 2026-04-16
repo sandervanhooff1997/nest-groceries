@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { AuthenticatedGuard } from './guards/authenticated.guard';
 
 @Module({
-  exports: [],
+  providers: [AuthenticatedGuard],
+  exports: [AuthenticatedGuard],
 })
 export class SharedModule {}
-
