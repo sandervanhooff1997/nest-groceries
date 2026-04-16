@@ -1,2 +1,1 @@
-export const SHOPPING_LIST_REPOSITORY = Symbol('IShoppingListRepository');
-
+export const IShoppingListRepository = Symbol('IShoppingListRepository');

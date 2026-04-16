@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CqrsModule } from '@nestjs/cqrs';
 import { SharedModule } from '../shared/shared.module';
-import { ShoppingList, ShoppingListSchema, } from './schemas/shopping-list.schema';
+import {
+  ShoppingList,
+  ShoppingListSchema,
+} from './schemas/shopping-list.schema';
 import { ShoppingListController } from './shopping-list.controller';
 import { ShoppingListRepository } from './repositories/shopping-list.repository';
-import { SHOPPING_LIST_REPOSITORY } from './constants/shopping-list.constants';
+import { IShoppingListRepository } from './constants/shopping-list.constants';
 
 // Command Handlers
 import { CreateShoppingListHandler } from './commands/handlers/create-shopping-list.handler';
@@ -39,12 +42,12 @@ const queryHandlers = [
   providers: [
     ShoppingListRepository,
     {
-      provide: SHOPPING_LIST_REPOSITORY,
+      provide: IShoppingListRepository,
       useClass: ShoppingListRepository,
     },
     ...commandHandlers,
     ...queryHandlers,
   ],
-  exports: [SHOPPING_LIST_REPOSITORY],
+  exports: [IShoppingListRepository],
 })
 export class ShoppingListModule {}
