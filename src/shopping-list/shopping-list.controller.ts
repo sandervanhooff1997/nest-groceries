@@ -9,11 +9,11 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ShoppingListEntity } from './entities/shopping-list.entity';
-import { CreateShoppingListCommand } from './commands/impl/create-shopping-list.command';
-import { UpdateShoppingListCommand } from './commands/impl/update-shopping-list.command';
-import { DeleteShoppingListCommand } from './commands/impl/delete-shopping-list.command';
-import { FindAllShoppingListsQuery } from './queries/impl/find-all-shopping-lists.query';
-import { FindShoppingListByIdQuery } from './queries/impl/find-shopping-list-by-id.query';
+import { CreateShoppingListCommand } from './commands/handlers/create-shopping-list.handler';
+import { UpdateShoppingListCommand } from './commands/handlers/update-shopping-list.handler';
+import { DeleteShoppingListCommand } from './commands/handlers/delete-shopping-list.handler';
+import { FindAllShoppingListsQuery } from './queries/handlers/find-all-shopping-lists.handler';
+import { FindShoppingListByIdQuery } from './queries/handlers/find-shopping-list-by-id.handler';
 
 @Controller('shopping-lists')
 export class ShoppingListController {

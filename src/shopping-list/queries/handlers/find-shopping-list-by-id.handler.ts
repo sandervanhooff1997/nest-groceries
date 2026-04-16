@@ -1,8 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
-import { FindShoppingListByIdQuery } from '../impl/find-shopping-list-by-id.query';
 import { SHOPPING_LIST_REPOSITORY } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
+
+export class FindShoppingListByIdQuery {
+  constructor(public readonly id: string) {}
+}
 
 @QueryHandler(FindShoppingListByIdQuery)
 export class FindShoppingListByIdHandler
