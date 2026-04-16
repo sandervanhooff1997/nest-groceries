@@ -3,12 +3,19 @@ import { Inject } from '@nestjs/common';
 import { SHOPPING_LIST_REPOSITORY } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
 import { ShoppingListEntity } from '../../entities/shopping-list.entity';
+import type { IAuditable } from '../../../shared/interfaces/auditable.interface';
+import { User } from '../../../shared/entities/user.entity';
 
-export class UpdateShoppingListCommand {
+export class UpdateShoppingListCommand implements IAuditable {
+  user: User;
+
   constructor(
     public readonly id: string,
     public readonly shoppingList: Partial<ShoppingListEntity>,
-  ) {}
+    user: User,
+  ) {
+    this.user = user;
+  }
 }
 
 @CommandHandler(UpdateShoppingListCommand)
@@ -21,6 +28,9 @@ export class UpdateShoppingListHandler
   ) {}
 
   async execute(command: UpdateShoppingListCommand) {
+    console.log(
+      `User ${command.user.fullName} (${command.user.email}) updated shopping list ${command.id}`,
+    );
     return await this.repository.update(command.id, command.shoppingList);
   }
 }
