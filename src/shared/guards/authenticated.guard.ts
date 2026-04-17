@@ -1,45 +1,52 @@
 import {
-  CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Types } from 'mongoose';
-import { User } from '../entities/user.entity';
-import type { AuthenticatedRequest } from '../interfaces/authenticated-request.interface';
+import { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
+import type { Observable } from 'rxjs';
+import { IS_PUBLIC_ROUTE_KEY } from '../../auth/decorators/public.decorator';
+import type { User } from '../entities/user.entity';
 
 @Injectable()
-export class AuthenticatedGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
-    const userId = this.getHeaderValue(request.headers['x-user-id']);
-    const email = this.getHeaderValue(request.headers['x-user-email']);
-    const firstName = this.getHeaderValue(request.headers['x-user-first-name']);
-    const lastName = this.getHeaderValue(request.headers['x-user-last-name']);
-
-    if (
-      !userId ||
-      !Types.ObjectId.isValid(userId) ||
-      !email ||
-      !firstName ||
-      !lastName
-    ) {
-      throw new UnauthorizedException('Missing authenticated user headers');
-    }
-
-    request.user = new User({
-      _id: new Types.ObjectId(userId),
-      email,
-      firstName,
-      lastName,
-    });
-
-    return true;
+export class AuthenticatedGuard extends AuthGuard('jwt') {
+  constructor(private readonly reflector: Reflector) {
+    super();
   }
 
-  private getHeaderValue(
-    header: string | string[] | undefined,
-  ): string | undefined {
-    return Array.isArray(header) ? header[0] : header;
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(
+      IS_PUBLIC_ROUTE_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (isPublic) {
+      return true;
+    }
+
+    return super.canActivate(context);
+  }
+
+  handleRequest<TUser = User>(
+    err: unknown,
+    user: TUser | false,
+    _info: unknown,
+    _context: ExecutionContext,
+  ): TUser {
+    void _info;
+    void _context;
+
+    if (err instanceof Error) {
+      throw err;
+    }
+
+    if (!user) {
+      throw new UnauthorizedException('Missing or invalid bearer token');
+    }
+
+    return user;
   }
 }

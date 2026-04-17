@@ -24,14 +24,7 @@ async function bootstrap() {
     origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'x-user-id',
-      'x-user-email',
-      'x-user-first-name',
-      'x-user-last-name',
-    ],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -50,6 +43,7 @@ async function bootstrap() {
     .setTitle('Nest Groceries API')
     .setDescription('Shopping list management API')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 

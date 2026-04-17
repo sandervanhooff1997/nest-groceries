@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { CqrsModule } from '@nestjs/cqrs';
+import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from '../shared/shared.module';
+import { AuditingCommandBus } from '../shared/buses/auditing-command-bus';
+import { AuditingEventBus } from '../shared/buses/auditing-event-bus';
+import { AuditingQueryBus } from '../shared/buses/auditing-query-bus';
 import { shoppingList } from './schemas/shopping-list.schema';
 import { ShoppingList } from './entities/shopping-list.entity';
 import { ShoppingListController } from './controllers/shopping-list.controller';
@@ -39,6 +42,9 @@ const queryHandlers = [
   controllers: [ShoppingListController],
   providers: [
     ShoppingListRepository,
+    AuditingCommandBus,
+    AuditingQueryBus,
+    AuditingEventBus,
     {
       provide: IShoppingListRepository,
       useClass: ShoppingListRepository,

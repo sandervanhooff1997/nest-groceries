@@ -9,6 +9,8 @@ export const envValidationSchema = Joi.object({
     .uri({ scheme: ['mongodb', 'mongodb+srv'] })
     .required(),
   ALLOWED_ORIGINS: Joi.string().required(),
+  JWT_SECRET: Joi.string().min(32).required(),
+  JWT_EXPIRES_IN: Joi.number().integer().min(1).required(),
   THROTTLE_TTL: Joi.number().integer().min(1).required(),
   THROTTLE_LIMIT: Joi.number().integer().min(1).required(),
 });
