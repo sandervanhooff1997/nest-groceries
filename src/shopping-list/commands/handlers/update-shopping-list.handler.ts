@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Inject } from '@nestjs/common';
+import { Inject, Logger, NotFoundException } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '../../entities/shopping-list.entity';
@@ -16,18 +16,33 @@ export class UpdateShoppingListCommand implements IAuditable {
 
 @CommandHandler(UpdateShoppingListCommand)
 export class UpdateShoppingListHandler implements ICommandHandler<UpdateShoppingListCommand> {
+  private readonly logger = new Logger(UpdateShoppingListHandler.name);
+
   constructor(
     @Inject(IShoppingListRepository)
     private readonly repository: ShoppingListRepositoryPort,
   ) {}
 
   async execute(command: UpdateShoppingListCommand) {
-    console.log(
-      `User ${command.user.fullName} (${command.user.email}) updated shopping list ${command.id}`,
+    const userId = command.user._id.toString();
+
+    this.logger.log(
+      `Updating shopping list ${command.id} for ${command.user.email}`,
     );
-    return await this.repository.update(command.id, {
-      ...command.shoppingList,
-      updatedBy: command.user._id.toString(),
-    });
+
+    const shoppingList = await this.repository.updateForUser(
+      command.id,
+      userId,
+      {
+        ...command.shoppingList,
+        updatedBy: userId,
+      },
+    );
+
+    if (!shoppingList) {
+      throw new NotFoundException('Shopping list not found');
+    }
+
+    return shoppingList;
   }
 }

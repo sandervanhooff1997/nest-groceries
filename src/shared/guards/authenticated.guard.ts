@@ -17,15 +17,18 @@ export class AuthenticatedGuard implements CanActivate {
     const firstName = this.getHeaderValue(request.headers['x-user-first-name']);
     const lastName = this.getHeaderValue(request.headers['x-user-last-name']);
 
-    if (!email || !firstName || !lastName) {
+    if (
+      !userId ||
+      !Types.ObjectId.isValid(userId) ||
+      !email ||
+      !firstName ||
+      !lastName
+    ) {
       throw new UnauthorizedException('Missing authenticated user headers');
     }
 
     request.user = new User({
-      _id:
-        userId && Types.ObjectId.isValid(userId)
-          ? new Types.ObjectId(userId)
-          : new Types.ObjectId(),
+      _id: new Types.ObjectId(userId),
       email,
       firstName,
       lastName,

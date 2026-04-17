@@ -14,4 +14,3 @@ export class User {
     return `${this.firstName} ${this.lastName}`;
   }
 }
-

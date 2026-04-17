@@ -2,11 +2,12 @@ import type { ShoppingList } from '../entities/shopping-list.entity';
 
 export interface IShoppingListRepository {
   create(shoppingList: ShoppingList): Promise<ShoppingList>;
-  findAll(): Promise<ShoppingList[]>;
-  findById(id: string): Promise<ShoppingList | null>;
-  update(
+  findAllByUser(userId: string): Promise<ShoppingList[]>;
+  findByIdForUser(id: string, userId: string): Promise<ShoppingList | null>;
+  updateForUser(
     id: string,
+    userId: string,
     shoppingList: Partial<ShoppingList>,
   ): Promise<ShoppingList | null>;
-  delete(id: string): Promise<ShoppingList | null>;
+  deleteForUser(id: string, userId: string): Promise<ShoppingList | null>;
 }

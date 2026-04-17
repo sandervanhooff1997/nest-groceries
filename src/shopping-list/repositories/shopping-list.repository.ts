@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  ShoppingList as ShoppingListSchemaModel,
-  type ShoppingListDocument,
-} from '../schemas/shopping-list.schema';
 import type { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '../entities/shopping-list.entity';
+import type { ShoppingListDocument } from '../schemas/shopping-list.schema';
 import { mapDocument, mapDocuments } from '../../shared/mappers/entity-mapper';
 
 @Injectable()
 export class ShoppingListRepository implements IShoppingListRepository {
   constructor(
-    @InjectModel(ShoppingListSchemaModel.name)
+    @InjectModel(ShoppingList.name)
     private readonly shoppingListModel: Model<ShoppingListDocument>,
   ) {}
 
@@ -22,22 +19,30 @@ export class ShoppingListRepository implements IShoppingListRepository {
     return ShoppingList.fromDocument(createdShoppingList);
   }
 
-  async findAll(): Promise<ShoppingList[]> {
-    const shoppingLists = await this.shoppingListModel.find().exec();
+  async findAllByUser(userId: string): Promise<ShoppingList[]> {
+    const shoppingLists = await this.shoppingListModel
+      .find({ createdBy: userId })
+      .exec();
     return mapDocuments(shoppingLists, ShoppingList.fromDocument);
   }
 
-  async findById(id: string): Promise<ShoppingList | null> {
-    const shoppingList = await this.shoppingListModel.findById(id).exec();
+  async findByIdForUser(
+    id: string,
+    userId: string,
+  ): Promise<ShoppingList | null> {
+    const shoppingList = await this.shoppingListModel
+      .findOne({ _id: id, createdBy: userId })
+      .exec();
     return mapDocument(shoppingList, ShoppingList.fromDocument);
   }
 
-  async update(
+  async updateForUser(
     id: string,
+    userId: string,
     shoppingList: Partial<ShoppingList>,
   ): Promise<ShoppingList | null> {
     const updatedShoppingList = await this.shoppingListModel
-      .findByIdAndUpdate(id, shoppingList, {
+      .findOneAndUpdate({ _id: id, createdBy: userId }, shoppingList, {
         new: true,
         runValidators: true,
       })
@@ -46,9 +51,12 @@ export class ShoppingListRepository implements IShoppingListRepository {
     return mapDocument(updatedShoppingList, ShoppingList.fromDocument);
   }
 
-  async delete(id: string): Promise<ShoppingList | null> {
+  async deleteForUser(
+    id: string,
+    userId: string,
+  ): Promise<ShoppingList | null> {
     const deletedShoppingList = await this.shoppingListModel
-      .findByIdAndDelete(id)
+      .findOneAndDelete({ _id: id, createdBy: userId })
       .exec();
     return mapDocument(deletedShoppingList, ShoppingList.fromDocument);
   }
