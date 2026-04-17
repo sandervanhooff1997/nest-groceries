@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { UserFactory, ShoppingListFactory } from '../../../common/factories';
+import { UserFactory, ShoppingListFactory } from '@common/factories';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
 import {
   DeleteShoppingListCommand,

@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import type { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '../entities/shopping-list.entity';
 import type { ShoppingListDocument } from '../schemas/shopping-list.schema';
-import { mapDocument, mapDocuments } from '../../shared/mappers/entity-mapper';
+import { mapDocument, mapDocuments } from '@shared/mappers/entity-mapper';
 
 @Injectable()
 export class ShoppingListRepository implements IShoppingListRepository {

@@ -14,6 +14,14 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@auth/*": ["src/auth/*"],
+      "@common/*": ["src/common/*"],
+      "@config/*": ["src/config/*"],
+      "@health/*": ["src/health/*"],
+      "@shared/*": ["src/shared/*"],
+      "@shopping-list/*": ["src/shopping-list/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

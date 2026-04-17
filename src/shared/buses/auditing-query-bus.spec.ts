@@ -1,7 +1,7 @@
 import { QueryBus } from '@nestjs/cqrs';
 import { AuditingQueryBus } from './auditing-query-bus';
 import { EventLogService } from '../services/event-log.service';
-import { UserFactory } from '../../common/factories';
+import { UserFactory } from '@common/factories';
 import type { IAuditable } from '../interfaces/auditable.interface';
 import type { User } from '../entities/user.entity';
 

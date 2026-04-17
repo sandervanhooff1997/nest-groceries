@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { User } from '../../shared/entities/user.entity';
+import { User } from '@shared/entities/user.entity';
 
 export class UserFactory {
   static create(partial?: Partial<User>): User {

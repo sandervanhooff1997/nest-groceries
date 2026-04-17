@@ -6,7 +6,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import type { Observable } from 'rxjs';
-import { IS_PUBLIC_ROUTE_KEY } from '../../auth/decorators/public.decorator';
+import { IS_PUBLIC_ROUTE_KEY } from '@auth/decorators/public.decorator';
 import type { User } from '../entities/user.entity';
 
 @Injectable()

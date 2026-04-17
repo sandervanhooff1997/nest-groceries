@@ -1,4 +1,4 @@
-import { GroceryItem } from '../../shopping-list/entities/grocery-item.entity';
+import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
 
 export class GroceryItemFactory {
   static create(partial?: Partial<GroceryItem>): GroceryItem {

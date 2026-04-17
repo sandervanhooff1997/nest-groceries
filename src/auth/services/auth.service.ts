@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import { AuthTokenResponseDto } from '../dto/auth-token-response.dto';
 import { IssueTokenDto } from '../dto/issue-token.dto';
 import type { JwtUserPayload } from '../interfaces/jwt-user-payload.interface';
-import { User } from '../../shared/entities/user.entity';
+import { User } from '@shared/entities/user.entity';
 
 @Injectable()
 export class AuthService {

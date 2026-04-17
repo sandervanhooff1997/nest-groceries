@@ -1,4 +1,4 @@
-import { UserFactory, ShoppingListFactory } from '../../../common/factories';
+import { UserFactory, ShoppingListFactory } from '@common/factories';
 import {
   FindAllShoppingListsHandler,
   FindAllShoppingListsQuery,

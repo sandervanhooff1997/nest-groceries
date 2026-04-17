@@ -1,4 +1,4 @@
-import { ShoppingList } from '../../shopping-list/entities/shopping-list.entity';
+import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 import { GroceryItemFactory } from './grocery-item.factory';
 import { UserFactory } from './user.factory';
 

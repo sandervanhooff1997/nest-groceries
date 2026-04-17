@@ -14,11 +14,11 @@ import { DeleteShoppingListCommand } from '../commands/handlers/delete-shopping-
 import { FindAllShoppingListsQuery } from '../queries/handlers/find-all-shopping-lists.handler';
 import { FindShoppingListByIdQuery } from '../queries/handlers/find-shopping-list-by-id.handler';
 import type { ShoppingListDocument } from '../schemas/shopping-list.schema';
-import { AuditingCommandBus } from '../../shared/buses/auditing-command-bus';
-import { AuditingQueryBus } from '../../shared/buses/auditing-query-bus';
-import { ApiController } from '../../shared/decorators/api-controller.decorator';
-import { User } from '../../shared/decorators/user.decorator';
-import type { User as AuthenticatedUser } from '../../shared/entities/user.entity';
+import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
+import { AuditingQueryBus } from '@shared/buses/auditing-query-bus';
+import { ApiController } from '@shared/decorators/api-controller.decorator';
+import { User } from '@shared/decorators/user.decorator';
+import type { User as AuthenticatedUser } from '@shared/entities/user.entity';
 
 @ApiTags('shopping-lists')
 @ApiController('shopping-lists')

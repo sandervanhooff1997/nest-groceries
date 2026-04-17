@@ -1,7 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { ExecutionContext } from '@nestjs/common';
-import { UserFactory } from '../../common/factories';
+import { UserFactory } from '@common/factories';
 import { AuthenticatedGuard } from './authenticated.guard';
 
 function createExecutionContext(): ExecutionContext {

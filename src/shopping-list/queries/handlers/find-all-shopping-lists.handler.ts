@@ -2,8 +2,8 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject, Logger } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
-import type { IAuditable } from '../../../shared/interfaces/auditable.interface';
-import type { User } from '../../../shared/entities/user.entity';
+import type { IAuditable } from '@shared/interfaces/auditable.interface';
+import type { User } from '@shared/entities/user.entity';
 
 export class FindAllShoppingListsQuery implements IAuditable {
   constructor(public readonly user: User) {}
