@@ -10,6 +10,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prepare": "husky",
     "precommit:lint": "lint-staged",
+    "guard:lockfile": "node scripts/guard-lockfile.cjs",
+    "commitlint": "commitlint --edit",
     "typecheck": "tsc --noEmit",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -44,6 +46,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
@@ -90,6 +94,6 @@
   },
   "lint-staged": {
     "{src,test}/**/*.ts": "eslint --fix --max-warnings=0",
-    "*.{js,ts,mjs,cjs}": "eslint --fix --max-warnings=0"
+    "*.{js,ts,mjs,cjs}": "eslint --fix --max-warnings=0 --no-warn-ignored"
   }
 }

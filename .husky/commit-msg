@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm guard:lockfile
-pnpm precommit:lint
+pnpm commitlint "$1"
+
