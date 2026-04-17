@@ -4,11 +4,11 @@ export const envValidationSchema = Joi.object({
   NODE_ENV: Joi.string()
     .valid('development', 'test', 'production')
     .default('development'),
-  PORT: Joi.number().port().default(3000),
+  PORT: Joi.number().port().required(),
   MONGODB_URI: Joi.string()
     .uri({ scheme: ['mongodb', 'mongodb+srv'] })
-    .default('mongodb://localhost:27017/nest-groceries'),
-  ALLOWED_ORIGINS: Joi.string().default('http://localhost:3000'),
-  THROTTLE_TTL: Joi.number().integer().min(1).default(60),
-  THROTTLE_LIMIT: Joi.number().integer().min(1).default(100),
+    .required(),
+  ALLOWED_ORIGINS: Joi.string().required(),
+  THROTTLE_TTL: Joi.number().integer().min(1).required(),
+  THROTTLE_LIMIT: Joi.number().integer().min(1).required(),
 });

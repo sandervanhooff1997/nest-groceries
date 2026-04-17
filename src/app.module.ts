@@ -12,6 +12,7 @@ import { ShoppingListModule } from './shopping-list/shopping-list.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       validationSchema: envValidationSchema,
     }),
     MongooseModule.forRootAsync({
