@@ -1,9 +1,8 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { ExecutionContext } from '@nestjs/common';
-import { Types } from 'mongoose';
+import { UserFactory } from '../../common/factories';
 import { AuthenticatedGuard } from './authenticated.guard';
-import { User } from '../entities/user.entity';
 
 function createExecutionContext(): ExecutionContext {
   return {
@@ -57,13 +56,7 @@ describe('AuthenticatedGuard', () => {
 
   it('should return the authenticated user when the token is valid', () => {
     const context = createExecutionContext();
-    const userId = new Types.ObjectId();
-    const user = new User({
-      _id: userId,
-      email: 'test@example.com',
-      firstName: 'Test',
-      lastName: 'User',
-    });
+    const user = UserFactory.create();
 
     expect(guard.handleRequest(null, user, null, context)).toBe(user);
   });

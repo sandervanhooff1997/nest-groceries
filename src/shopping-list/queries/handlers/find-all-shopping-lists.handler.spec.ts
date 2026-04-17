@@ -1,15 +1,12 @@
-import { Types } from 'mongoose';
-import { User } from '../../../shared/entities/user.entity';
+import { UserFactory, ShoppingListFactory } from '../../../common/factories';
 import {
   FindAllShoppingListsHandler,
   FindAllShoppingListsQuery,
 } from './find-all-shopping-lists.handler';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
-import { ShoppingList } from '../../entities/shopping-list.entity';
 
 describe('FindAllShoppingListsHandler', () => {
-  const user = new User({
-    _id: new Types.ObjectId(),
+  const user = UserFactory.create({
     email: 'owner@example.com',
     firstName: 'Owner',
     lastName: 'User',
@@ -17,7 +14,7 @@ describe('FindAllShoppingListsHandler', () => {
 
   it('should only request shopping lists for the current user', async () => {
     const expectedLists = [
-      new ShoppingList({ name: 'Weekly groceries', items: [] }),
+      ShoppingListFactory.create({ name: 'Weekly groceries' }),
     ];
     const findAllByUser = jest.fn().mockResolvedValue(expectedLists);
     const repository: jest.Mocked<IShoppingListRepository> = {

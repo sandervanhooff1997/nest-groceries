@@ -1,9 +1,9 @@
 import { CommandBus } from '@nestjs/cqrs';
-import { Types } from 'mongoose';
 import { AuditingCommandBus } from './auditing-command-bus';
 import { EventLogService } from '../services/event-log.service';
-import { User } from '../entities/user.entity';
+import { UserFactory } from '../../common/factories';
 import type { IAuditable } from '../interfaces/auditable.interface';
+import type { User } from '../entities/user.entity';
 
 class TestCommand implements IAuditable {
   constructor(public readonly user: User) {}
@@ -29,8 +29,7 @@ describe('AuditingCommandBus', () => {
 
   it('should log auditable commands before delegating execution', async () => {
     const command = new TestCommand(
-      new User({
-        _id: new Types.ObjectId(),
+      UserFactory.create({
         email: 'owner@example.com',
         firstName: 'Owner',
         lastName: 'User',

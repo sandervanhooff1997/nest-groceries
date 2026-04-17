@@ -1,7 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Types } from 'mongoose';
-import { User } from '../../../shared/entities/user.entity';
-import { ShoppingList } from '../../entities/shopping-list.entity';
+import { UserFactory, ShoppingListFactory } from '../../../common/factories';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
 import {
   FindShoppingListByIdHandler,
@@ -9,18 +7,16 @@ import {
 } from './find-shopping-list-by-id.handler';
 
 describe('FindShoppingListByIdHandler', () => {
-  const user = new User({
-    _id: new Types.ObjectId(),
+  const user = UserFactory.create({
     email: 'owner@example.com',
     firstName: 'Owner',
     lastName: 'User',
   });
 
   it('should fetch the shopping list for the current user', async () => {
-    const expectedList = new ShoppingList({
+    const expectedList = ShoppingListFactory.create({
       _id: 'list-id',
       name: 'Weekly',
-      items: [],
     });
     const findByIdForUser = jest.fn().mockResolvedValue(expectedList);
     const repository: jest.Mocked<IShoppingListRepository> = {

@@ -1,7 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Types } from 'mongoose';
-import { User } from '../../../shared/entities/user.entity';
-import { ShoppingList } from '../../entities/shopping-list.entity';
+import { UserFactory, ShoppingListFactory } from '../../../common/factories';
 import type { IShoppingListRepository } from '../../interfaces/shopping-list.repository.interface';
 import {
   UpdateShoppingListCommand,
@@ -9,18 +7,16 @@ import {
 } from './update-shopping-list.handler';
 
 describe('UpdateShoppingListHandler', () => {
-  const user = new User({
-    _id: new Types.ObjectId(),
+  const user = UserFactory.create({
     email: 'owner@example.com',
     firstName: 'Owner',
     lastName: 'User',
   });
 
   it('should update a shopping list for the current user', async () => {
-    const updatedList = new ShoppingList({
+    const updatedList = ShoppingListFactory.create({
       _id: 'list-id',
       name: 'Updated',
-      items: [],
     });
     const updateForUser = jest.fn().mockResolvedValue(updatedList);
     const repository: jest.Mocked<IShoppingListRepository> = {

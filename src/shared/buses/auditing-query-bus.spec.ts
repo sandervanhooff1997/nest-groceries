@@ -1,9 +1,9 @@
 import { QueryBus } from '@nestjs/cqrs';
-import { Types } from 'mongoose';
 import { AuditingQueryBus } from './auditing-query-bus';
 import { EventLogService } from '../services/event-log.service';
-import { User } from '../entities/user.entity';
+import { UserFactory } from '../../common/factories';
 import type { IAuditable } from '../interfaces/auditable.interface';
+import type { User } from '../entities/user.entity';
 
 class TestQuery implements IAuditable {
   constructor(public readonly user: User) {}
@@ -29,8 +29,7 @@ describe('AuditingQueryBus', () => {
 
   it('should log auditable queries before delegating execution', async () => {
     const query = new TestQuery(
-      new User({
-        _id: new Types.ObjectId(),
+      UserFactory.create({
         email: 'owner@example.com',
         firstName: 'Owner',
         lastName: 'User',
