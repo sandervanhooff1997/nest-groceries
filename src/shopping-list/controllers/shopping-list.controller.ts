@@ -1,5 +1,11 @@
 import { Body, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ShoppingList } from '../entities/shopping-list.entity';
 import { CreateShoppingListDto } from '../dto/create-shopping-list.dto';
 import { UpdateShoppingListDto } from '../dto/update-shopping-list.dto';
@@ -13,6 +19,7 @@ import { ApiController } from '../../shared/decorators/api-controller.decorator'
 import { User } from '../../shared/decorators/user.decorator';
 import type { User as AuthenticatedUser } from '../../shared/entities/user.entity';
 
+@ApiTags('shopping-lists')
 @ApiController('shopping-lists')
 export class ShoppingListController {
   constructor(
@@ -21,6 +28,8 @@ export class ShoppingListController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a shopping list' })
+  @ApiCreatedResponse({ description: 'The shopping list has been created.' })
   async create(
     @Body() shoppingList: CreateShoppingListDto,
     @User() user: AuthenticatedUser,
@@ -37,6 +46,8 @@ export class ShoppingListController {
   }
 
   @Get()
+  @ApiOperation({ summary: "List the current user's shopping lists" })
+  @ApiOkResponse({ description: 'Shopping lists retrieved successfully.' })
   async findAll(
     @User() user: AuthenticatedUser,
   ): Promise<ShoppingListDocument[]> {
@@ -47,6 +58,8 @@ export class ShoppingListController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a shopping list by id for the current user' })
+  @ApiOkResponse({ description: 'Shopping list retrieved successfully.' })
   async findById(
     @Param('id') id: string,
     @User() user: AuthenticatedUser,
@@ -58,6 +71,8 @@ export class ShoppingListController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a shopping list for the current user' })
+  @ApiOkResponse({ description: 'Shopping list updated successfully.' })
   async update(
     @Param('id') id: string,
     @Body() shoppingList: UpdateShoppingListDto,
@@ -75,6 +90,8 @@ export class ShoppingListController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a shopping list for the current user' })
+  @ApiOkResponse({ description: 'Shopping list deleted successfully.' })
   async delete(
     @Param('id') id: string,
     @User() user: AuthenticatedUser,
