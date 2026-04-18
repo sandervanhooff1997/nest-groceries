@@ -4,6 +4,7 @@ import { GroceryItem } from './grocery-item.entity';
 export class ShoppingList {
   _id?: string;
   name: string;
+  nextId?: string;
   items: GroceryItem[];
   createdBy: string;
   updatedBy: string;
@@ -22,6 +23,7 @@ export class ShoppingList {
     return new ShoppingList({
       _id: document._id?.toString(),
       name: document.name,
+      nextId: document.nextId,
       items: (document.items ?? []).map((item) =>
         GroceryItem.fromDocument(item),
       ),

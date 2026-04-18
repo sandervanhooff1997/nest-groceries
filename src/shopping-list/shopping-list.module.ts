@@ -15,6 +15,7 @@ import { IShoppingListRepository } from './constants/shopping-list.constants';
 import { CreateShoppingListHandler } from './commands/handlers/create-shopping-list.handler';
 import { UpdateShoppingListHandler } from './commands/handlers/update-shopping-list.handler';
 import { DeleteShoppingListHandler } from './commands/handlers/delete-shopping-list.handler';
+import { DuplicateShoppingListHandler } from './commands/handlers/duplicate-shopping-list.handler';
 
 // Query Handlers
 import { FindAllShoppingListsHandler } from './queries/handlers/find-all-shopping-lists.handler';
@@ -24,6 +25,7 @@ const commandHandlers = [
   CreateShoppingListHandler,
   UpdateShoppingListHandler,
   DeleteShoppingListHandler,
+  DuplicateShoppingListHandler,
 ];
 
 const queryHandlers = [

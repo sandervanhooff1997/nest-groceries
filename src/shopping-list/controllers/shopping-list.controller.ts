@@ -11,6 +11,7 @@ import { UpdateShoppingListDto } from '../dto/update-shopping-list.dto';
 import { CreateShoppingListCommand } from '../commands/handlers/create-shopping-list.handler';
 import { UpdateShoppingListCommand } from '../commands/handlers/update-shopping-list.handler';
 import { DeleteShoppingListCommand } from '../commands/handlers/delete-shopping-list.handler';
+import { DuplicateShoppingListCommand } from '../commands/handlers/duplicate-shopping-list.handler';
 import { FindAllShoppingListsQuery } from '../queries/handlers/find-all-shopping-lists.handler';
 import { FindShoppingListByIdQuery } from '../queries/handlers/find-shopping-list-by-id.handler';
 import type { ShoppingListDocument } from '../schemas/shopping-list.schema';
@@ -88,6 +89,19 @@ export class ShoppingListController {
       UpdateShoppingListCommand,
       ShoppingListDocument | null
     >(new UpdateShoppingListCommand(id, shoppingListUpdate, user));
+  }
+
+  @Post(':id/duplicate')
+  @ApiOperation({ summary: 'Duplicate a shopping list for the current user' })
+  @ApiCreatedResponse({ description: 'Shopping list duplicated successfully.' })
+  async duplicate(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser,
+  ): Promise<ShoppingListDocument> {
+    return await this.commandBus.execute<
+      DuplicateShoppingListCommand,
+      ShoppingListDocument
+    >(new DuplicateShoppingListCommand(id, user));
   }
 
   @Delete(':id')

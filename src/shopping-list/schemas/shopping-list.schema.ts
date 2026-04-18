@@ -9,6 +9,9 @@ export class ShoppingList {
   @Prop({ required: true, trim: true })
   name: string;
 
+  @Prop({ trim: true })
+  nextId?: string;
+
   @Prop({ type: [groceryItem], default: [] })
   items: GroceryItem[];
 
