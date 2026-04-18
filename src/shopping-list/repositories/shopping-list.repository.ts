@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import type { IShoppingListRepository } from '../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '../entities/shopping-list.entity';
+import type { GroceryItem } from '../entities/grocery-item.entity';
 import type { ShoppingListDocument } from '../schemas/shopping-list.schema';
 import { mapDocument, mapDocuments } from '@shared/mappers/entity-mapper';
 
@@ -59,5 +60,74 @@ export class ShoppingListRepository implements IShoppingListRepository {
       .findOneAndDelete({ _id: id, createdBy: userId })
       .exec();
     return mapDocument(deletedShoppingList, ShoppingList.fromDocument);
+  }
+
+  async addItemForUser(
+    id: string,
+    userId: string,
+    item: GroceryItem,
+  ): Promise<ShoppingList | null> {
+    const updatedShoppingList = await this.shoppingListModel
+      .findOneAndUpdate(
+        { _id: id, createdBy: userId },
+        {
+          $push: { items: item },
+          $set: { updatedBy: userId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+      .exec();
+
+    return mapDocument(updatedShoppingList, ShoppingList.fromDocument);
+  }
+
+  async removeItemForUser(
+    id: string,
+    userId: string,
+    itemId: string,
+  ): Promise<ShoppingList | null> {
+    const updatedShoppingList = await this.shoppingListModel
+      .findOneAndUpdate(
+        { _id: id, createdBy: userId, 'items._id': itemId },
+        {
+          $pull: { items: { _id: itemId } },
+          $set: { updatedBy: userId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+      .exec();
+
+    return mapDocument(updatedShoppingList, ShoppingList.fromDocument);
+  }
+
+  async setItemPurchasedForUser(
+    id: string,
+    userId: string,
+    itemId: string,
+    purchased: boolean,
+  ): Promise<ShoppingList | null> {
+    const updatedShoppingList = await this.shoppingListModel
+      .findOneAndUpdate(
+        { _id: id, createdBy: userId, 'items._id': itemId },
+        {
+          $set: {
+            'items.$.purchased': purchased,
+            updatedBy: userId,
+          },
+        },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+      .exec();
+
+    return mapDocument(updatedShoppingList, ShoppingList.fromDocument);
   }
 }

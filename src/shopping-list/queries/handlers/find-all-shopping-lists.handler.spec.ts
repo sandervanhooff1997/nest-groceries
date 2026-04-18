@@ -23,6 +23,9 @@ describe('FindAllShoppingListsHandler', () => {
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new FindAllShoppingListsHandler(repository);
 

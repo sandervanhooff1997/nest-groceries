@@ -25,6 +25,9 @@ describe('DeleteShoppingListHandler', () => {
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser,
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new DeleteShoppingListHandler(repository);
 
@@ -43,6 +46,9 @@ describe('DeleteShoppingListHandler', () => {
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn().mockResolvedValue(null),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new DeleteShoppingListHandler(repository);
 

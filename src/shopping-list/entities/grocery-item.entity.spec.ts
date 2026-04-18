@@ -1,6 +1,6 @@
 import { GroceryItem } from './grocery-item.entity';
 import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
-import type { GroceryItem as GroceryItemDocument } from '../schemas/grocery-item.schema';
+import type { GroceryItemDocument } from '../schemas/grocery-item.schema';
 
 describe('GroceryItem', () => {
   it('should build displayName with name, quantity and unit', () => {

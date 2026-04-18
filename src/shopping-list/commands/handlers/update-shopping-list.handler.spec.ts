@@ -25,6 +25,9 @@ describe('UpdateShoppingListHandler', () => {
       findByIdForUser: jest.fn(),
       updateForUser,
       deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new UpdateShoppingListHandler(repository);
 
@@ -50,6 +53,9 @@ describe('UpdateShoppingListHandler', () => {
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn().mockResolvedValue(null),
       deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new UpdateShoppingListHandler(repository);
 

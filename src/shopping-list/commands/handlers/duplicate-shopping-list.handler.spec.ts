@@ -40,6 +40,9 @@ describe('DuplicateShoppingListHandler', () => {
       findByIdForUser,
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new DuplicateShoppingListHandler(repository);
 
@@ -69,6 +72,9 @@ describe('DuplicateShoppingListHandler', () => {
       findByIdForUser: jest.fn().mockResolvedValue(null),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
     };
     const handler = new DuplicateShoppingListHandler(repository);
 

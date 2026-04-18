@@ -16,6 +16,9 @@ import { CreateShoppingListHandler } from './commands/handlers/create-shopping-l
 import { UpdateShoppingListHandler } from './commands/handlers/update-shopping-list.handler';
 import { DeleteShoppingListHandler } from './commands/handlers/delete-shopping-list.handler';
 import { DuplicateShoppingListHandler } from './commands/handlers/duplicate-shopping-list.handler';
+import { AddGroceryItemHandler } from './commands/handlers/add-grocery-item.handler';
+import { RemoveGroceryItemHandler } from './commands/handlers/remove-grocery-item.handler';
+import { SetGroceryItemPurchasedStatusHandler } from './commands/handlers/set-grocery-item-purchased-status.handler';
 
 // Query Handlers
 import { FindAllShoppingListsHandler } from './queries/handlers/find-all-shopping-lists.handler';
@@ -26,6 +29,9 @@ const commandHandlers = [
   UpdateShoppingListHandler,
   DeleteShoppingListHandler,
   DuplicateShoppingListHandler,
+  AddGroceryItemHandler,
+  RemoveGroceryItemHandler,
+  SetGroceryItemPurchasedStatusHandler,
 ];
 
 const queryHandlers = [
