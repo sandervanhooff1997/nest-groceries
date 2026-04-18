@@ -1,25 +1,24 @@
-import { Body, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ShoppingList } from '../../entities/shopping-list.entity';
-import { CreateShoppingListDto } from '../../dto/create-shopping-list.dto';
-import { UpdateShoppingListDto } from '../../dto/update-shopping-list.dto';
-import { CreateShoppingListCommand } from '../../commands/handlers/create-shopping-list.handler';
-import { UpdateShoppingListCommand } from '../../commands/handlers/update-shopping-list.handler';
-import { DeleteShoppingListCommand } from '../../commands/handlers/delete-shopping-list.handler';
-import { FindAllShoppingListsQuery } from '../../queries/handlers/find-all-shopping-lists.handler';
-import { FindShoppingListByIdQuery } from '../../queries/handlers/find-shopping-list-by-id.handler';
-import type { ShoppingListDocument } from '../../schemas/shopping-list.schema';
+import { CreateShoppingListCommand } from '@shopping-list/commands/handlers/create-shopping-list.handler';
+import { DeleteShoppingListCommand } from '@shopping-list/commands/handlers/delete-shopping-list.handler';
+import { CreateShoppingListDto } from '@shopping-list/dto/create-shopping-list.dto';
+import { UpdateShoppingListDto } from '@shopping-list/dto/update-shopping-list.dto';
+import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
+import { FindAllShoppingListsQuery } from '@shopping-list/queries/handlers/find-all-shopping-lists.handler';
+import { FindShoppingListByIdQuery } from '@shopping-list/queries/handlers/find-shopping-list-by-id.handler';
+import type { ShoppingListDocument } from '@shopping-list/schemas/shopping-list.schema';
+import { UpdateShoppingListCommand } from '@shopping-list/commands/handlers/update-shopping-list.handler';
 import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
 import { AuditingQueryBus } from '@shared/buses/auditing-query-bus';
 import { ApiController } from '@shared/decorators/api-controller.decorator';
 import { User } from '@shared/decorators/user.decorator';
 import type { User as AuthenticatedUser } from '@shared/entities/user.entity';
-import { Param } from '@nestjs/common';
 
 @ApiTags('shopping-lists')
 @ApiController('shopping-lists')

@@ -1,7 +1,7 @@
 import { Post, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DuplicateShoppingListCommand } from '../../commands/handlers/duplicate-shopping-list.handler';
-import type { ShoppingListDocument } from '../../schemas/shopping-list.schema';
+import { DuplicateShoppingListCommand } from '@shopping-list/commands/handlers/duplicate-shopping-list.handler';
+import type { ShoppingListDocument } from '@shopping-list/schemas/shopping-list.schema';
 import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
 import { ApiController } from '@shared/decorators/api-controller.decorator';
 import { User } from '@shared/decorators/user.decorator';
@@ -22,7 +22,6 @@ export class ShoppingListActionsController {
     return await this.commandBus.execute<
       DuplicateShoppingListCommand,
       ShoppingListDocument
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     >(new DuplicateShoppingListCommand(id, user));
   }
 }

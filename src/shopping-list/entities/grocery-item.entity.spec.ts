@@ -1,6 +1,5 @@
 import { GroceryItem } from './grocery-item.entity';
 import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
-import type { GroceryItemDocument } from '../schemas/grocery-item.schema';
 
 describe('GroceryItem', () => {
   it('should build displayName with name, quantity and unit', () => {
@@ -28,7 +27,7 @@ describe('GroceryItem', () => {
   });
 
   it('should map unit enum from document', () => {
-    const itemDocument: GroceryItemDocument = {
+    const itemDocument = {
       name: 'Sugar',
       quantity: 500,
       unit: GroceryItemUnit.GRAM,

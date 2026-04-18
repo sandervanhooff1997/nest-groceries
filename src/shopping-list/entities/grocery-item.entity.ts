@@ -1,5 +1,12 @@
-import type { GroceryItemDocument } from '../schemas/grocery-item.schema';
+import type { GroceryItem as GroceryItemSchema } from '../schemas/grocery-item.schema';
 import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
+
+type GroceryItemSource = Pick<
+  GroceryItemSchema,
+  'name' | 'quantity' | 'unit' | 'purchased'
+> & {
+  _id?: { toString(): string } | string;
+};
 
 export class GroceryItem {
   _id?: string;
@@ -12,7 +19,15 @@ export class GroceryItem {
     Object.assign(this, partial);
   }
 
-  static fromDocument(this: void, document: GroceryItemDocument): GroceryItem {
+  get displayName(): string {
+    if (this.quantity === undefined || this.unit === undefined) {
+      return this.name;
+    }
+
+    return `${this.name} ${this.quantity} ${this.unit}`;
+  }
+
+  static fromDocument(this: void, document: GroceryItemSource): GroceryItem {
     return new GroceryItem({
       _id: document._id?.toString(),
       name: document.name,
@@ -20,13 +35,5 @@ export class GroceryItem {
       unit: document.unit,
       purchased: document.purchased,
     });
-  }
-
-  get displayName(): string {
-    if (this.quantity === undefined || this.unit === undefined) {
-      return this.name;
-    }
-
-    return `${this.name} ${this.quantity} ${this.unit}`;
   }
 }

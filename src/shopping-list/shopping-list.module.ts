@@ -11,6 +11,7 @@ import {
   ShoppingListsController,
   ShoppingListActionsController,
   GroceryItemsController,
+  GroceryItemActionsController,
 } from './controllers';
 import { ShoppingListRepository } from './repositories/shopping-list.repository';
 import { IShoppingListRepository } from './constants/shopping-list.constants';

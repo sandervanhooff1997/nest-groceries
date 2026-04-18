@@ -5,11 +5,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GroceryItem } from '../../entities/grocery-item.entity';
-import { GroceryItemDto } from '../../dto/create-shopping-list.dto';
-import { AddGroceryItemCommand } from '../../commands/handlers/add-grocery-item.handler';
-import { RemoveGroceryItemCommand } from '../../commands/handlers/remove-grocery-item.handler';
-import type { ShoppingListDocument } from '../../schemas/shopping-list.schema';
+import { AddGroceryItemCommand } from '@shopping-list/commands/handlers/add-grocery-item.handler';
+import { RemoveGroceryItemCommand } from '@shopping-list/commands/handlers/remove-grocery-item.handler';
+import { GroceryItemDto } from '@shopping-list/dto/create-shopping-list.dto';
+import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
+import type { ShoppingListDocument } from '@shopping-list/schemas/shopping-list.schema';
 import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
 import { ApiController } from '@shared/decorators/api-controller.decorator';
 import { User } from '@shared/decorators/user.decorator';

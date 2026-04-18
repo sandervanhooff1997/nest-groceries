@@ -1,7 +1,7 @@
 import { Param, Patch } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SetGroceryItemPurchasedStatusCommand } from '../../../commands/handlers/set-grocery-item-purchased-status.handler';
-import type { ShoppingListDocument } from '../../../schemas/shopping-list.schema';
+import { SetGroceryItemPurchasedStatusCommand } from '@shopping-list/commands/handlers/set-grocery-item-purchased-status.handler';
+import type { ShoppingListDocument } from '@shopping-list/schemas/shopping-list.schema';
 import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
 import { ApiController } from '@shared/decorators/api-controller.decorator';
 import { User } from '@shared/decorators/user.decorator';
