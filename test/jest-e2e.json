@@ -3,6 +3,7 @@
   "rootDir": "..",
   "testEnvironment": "node",
   "testRegex": "test/.*\\.e2e-spec.ts$",
+  "setupFilesAfterEnv": ["<rootDir>/test/e2e/setup-after-env.ts"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
@@ -12,6 +13,7 @@
     "^@config/(.*)$": "<rootDir>/src/config/$1",
     "^@health/(.*)$": "<rootDir>/src/health/$1",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1",
-    "^@shopping-list/(.*)$": "<rootDir>/src/shopping-list/$1"
+    "^@shopping-list/(.*)$": "<rootDir>/src/shopping-list/$1",
+    "^@test/(.*)$": "<rootDir>/test/$1"
   }
 }

@@ -1,5 +1,6 @@
 import request from 'supertest';
-import { createE2eApp, type E2eAppContext } from './e2e/create-e2e-app';
+import { createE2eApp } from '@test/e2e/create-e2e-app';
+import { registerE2eAppLifecycle } from '@test/e2e/helpers/e2e-test-helpers';
 
 interface HealthResponseBody {
   status: string;
@@ -10,25 +11,15 @@ interface HealthResponseBody {
 }
 
 describe('HealthController (e2e)', () => {
-  let e2eApp: E2eAppContext;
-
-  beforeAll(async () => {
-    e2eApp = await createE2eApp({ testFilePath: __filename });
-  });
-
-  afterAll(async () => {
-    await e2eApp.close();
-  });
+  const e2e = registerE2eAppLifecycle(createE2eApp, __filename);
 
   it('should use a dedicated database per e2e spec file', () => {
-    expect(e2eApp.databaseName).toMatch(/^e2e-[a-f\d]{24}$/u);
-    expect(e2eApp.connection.name).toBe(e2eApp.databaseName);
+    expect(e2e.app().databaseName).toMatch(/^e2e-[a-f\d]{24}$/u);
+    expect(e2e.app().connection.name).toBe(e2e.app().databaseName);
   });
 
   it('/api/health (GET)', async () => {
-    const response = await request(
-      e2eApp.app.getHttpServer() as Parameters<typeof request>[0],
-    )
+    const response = await request(e2e.httpServer())
       .get('/api/health')
       .expect(200);
     const responseBody = response.body as HealthResponseBody;

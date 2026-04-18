@@ -20,7 +20,8 @@
       "@config/*": ["src/config/*"],
       "@health/*": ["src/health/*"],
       "@shared/*": ["src/shared/*"],
-      "@shopping-list/*": ["src/shopping-list/*"]
+      "@shopping-list/*": ["src/shopping-list/*"],
+      "@test/*": ["test/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

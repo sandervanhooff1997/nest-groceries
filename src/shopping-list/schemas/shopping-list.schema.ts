@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { GroceryItem, groceryItem } from './grocery-item.schema';
 
 export type ShoppingListDocument = HydratedDocument<ShoppingList>;
@@ -21,7 +21,10 @@ export class ShoppingList {
   @Prop({ required: true, trim: true })
   updatedBy: string;
 
-  @Prop()
+  @Prop({
+    type: String,
+    default: () => new Types.ObjectId().toString(),
+  })
   _id?: string;
 
   createdAt?: Date;
