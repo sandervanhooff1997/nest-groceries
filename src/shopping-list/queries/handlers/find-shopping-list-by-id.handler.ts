@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { Inject, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
 import type { IAuditable } from '@shared/interfaces/auditable.interface';
@@ -14,8 +14,6 @@ export class FindShoppingListByIdQuery implements IAuditable {
 
 @QueryHandler(FindShoppingListByIdQuery)
 export class FindShoppingListByIdHandler implements IQueryHandler<FindShoppingListByIdQuery> {
-  private readonly logger = new Logger(FindShoppingListByIdHandler.name);
-
   constructor(
     @Inject(IShoppingListRepository)
     private readonly repository: ShoppingListRepositoryPort,
@@ -23,11 +21,6 @@ export class FindShoppingListByIdHandler implements IQueryHandler<FindShoppingLi
 
   async execute(query: FindShoppingListByIdQuery) {
     const userId = query.user._id.toString();
-
-    this.logger.log(
-      `Fetching shopping list ${query.id} for ${query.user.email}`,
-    );
-
     const shoppingList = await this.repository.findByIdForUser(
       query.id,
       userId,
