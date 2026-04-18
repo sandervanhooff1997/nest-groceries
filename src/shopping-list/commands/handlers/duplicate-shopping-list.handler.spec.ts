@@ -9,6 +9,7 @@ import {
   DuplicateShoppingListCommand,
   DuplicateShoppingListHandler,
 } from './duplicate-shopping-list.handler';
+import type { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 
 describe('DuplicateShoppingListHandler', () => {
   const user = UserFactory.create({
@@ -81,5 +82,45 @@ describe('DuplicateShoppingListHandler', () => {
     await expect(
       handler.execute(new DuplicateShoppingListCommand('missing-id', user)),
     ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should duplicate only selected items when itemIds are provided', async () => {
+    const milk = GroceryItemFactory.create({ _id: 'item-milk', name: 'Milk' });
+    const bread = GroceryItemFactory.create({
+      _id: 'item-bread',
+      name: 'Bread',
+    });
+    const sourceList = ShoppingListFactory.create({
+      _id: 'source-list-id',
+      name: 'Weekly groceries',
+      items: [milk, bread],
+    });
+
+    const findByIdForUser = jest.fn().mockResolvedValue(sourceList);
+    const create = jest
+      .fn()
+      .mockImplementation((shoppingList: ShoppingList) => shoppingList);
+    const repository: jest.Mocked<IShoppingListRepository> = {
+      create,
+      findAllByUser: jest.fn(),
+      findByIdForUser,
+      updateForUser: jest.fn(),
+      deleteForUser: jest.fn(),
+      addItemForUser: jest.fn(),
+      removeItemForUser: jest.fn(),
+      setItemPurchasedForUser: jest.fn(),
+    };
+    const handler = new DuplicateShoppingListHandler(repository);
+
+    const result = await handler.execute(
+      new DuplicateShoppingListCommand('source-list-id', user, ['item-bread']),
+    );
+
+    expect(findByIdForUser).toHaveBeenCalledWith(
+      'source-list-id',
+      user._id.toString(),
+    );
+    expect(result.items).toHaveLength(1);
+    expect(result.items[0]?._id).toBe('item-bread');
   });
 });

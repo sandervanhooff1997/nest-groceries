@@ -11,6 +11,7 @@ export class DuplicateShoppingListCommand implements IAuditable {
   constructor(
     public readonly id: string,
     public readonly user: User,
+    public readonly itemIds?: string[],
   ) {}
 }
 
@@ -32,12 +33,22 @@ export class DuplicateShoppingListHandler implements ICommandHandler<DuplicateSh
       throw new NotFoundException('Shopping list not found');
     }
 
+    const sourceItems = sourceShoppingList.items;
+    const selectedItemIds =
+      command.itemIds && command.itemIds.length > 0
+        ? new Set(command.itemIds)
+        : null;
+    const itemsToDuplicate = selectedItemIds
+      ? sourceItems.filter(
+          (item): item is GroceryItem =>
+            typeof item._id === 'string' && selectedItemIds.has(item._id),
+        )
+      : sourceItems;
+
     const duplicatedShoppingList = new ShoppingList({
       name: sourceShoppingList.name,
       nextId: sourceShoppingList._id,
-      items: sourceShoppingList.items.map(
-        (item) => new GroceryItem({ ...item }),
-      ),
+      items: itemsToDuplicate.map((item) => new GroceryItem({ ...item })),
       createdBy: userId,
       updatedBy: userId,
     });
