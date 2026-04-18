@@ -3,11 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { envValidationSchema } from './config/env.validation';
-import { AuthModule } from './auth/auth.module';
-import { HealthModule } from './health/health.module';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
-import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
+import { AuthModule } from '@auth/auth.module';
+import { envValidationSchema } from '@config/env.validation';
+import { HealthModule } from '@health/health.module';
+import { AuthenticatedGuard } from '@shared/guards/authenticated.guard';
+import { ShoppingListModule } from '@shopping-list/shopping-list.module';
 
 @Module({
   imports: [
@@ -36,13 +36,15 @@ import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
     ShoppingListModule,
   ],
   providers: [
+    AuthenticatedGuard,
+    ThrottlerGuard,
     {
       provide: APP_GUARD,
-      useClass: AuthenticatedGuard,
+      useExisting: AuthenticatedGuard,
     },
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useExisting: ThrottlerGuard,
     },
   ],
 })

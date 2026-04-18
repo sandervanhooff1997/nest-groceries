@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request, Response } from 'express';
+import { formatTimestamp } from '@shared/date/dayjs';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -41,7 +42,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode: status,
       message: safeMessage,
       error: this.resolveErrorCode(status),
-      timestamp: new Date().toISOString(),
+      timestamp: formatTimestamp(new Date()),
       path: request.url,
     });
   }

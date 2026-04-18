@@ -12,7 +12,7 @@ export class GroceryItem {
   @Prop({ min: 1 })
   quantity?: number;
 
-  @Prop({ enum: GroceryItemUnit })
+  @Prop({ type: String, enum: GroceryItemUnit })
   unit?: GroceryItemUnit;
 
   @Prop({ default: false })

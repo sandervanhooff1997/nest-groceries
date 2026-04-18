@@ -3,6 +3,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Connection } from 'mongoose';
 import { Public } from '@auth/decorators/public.decorator';
+import { formatTimestamp } from '@shared/date/dayjs';
 
 @ApiTags('health')
 @Public()
@@ -17,7 +18,7 @@ export class HealthController {
     schema: {
       example: {
         status: 'healthy',
-        timestamp: new Date().toISOString(),
+        timestamp: formatTimestamp(new Date()),
         services: {
           database: 'ok',
         },
@@ -35,7 +36,7 @@ export class HealthController {
 
     return {
       status: 'healthy',
-      timestamp: new Date().toISOString(),
+      timestamp: formatTimestamp(new Date()),
       services: {
         database: 'ok',
       },

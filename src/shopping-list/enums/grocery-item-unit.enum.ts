@@ -1,5 +1,5 @@
 export enum GroceryItemUnit {
-  STUKS = 'Stuk(s)',
+  PIECES = 'Piece(s)',
   GRAM = 'Gram',
   KILOGRAM = 'Kilogram',
   LITER = 'Liter',
