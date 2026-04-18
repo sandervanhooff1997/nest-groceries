@@ -9,6 +9,7 @@ import { CreateShoppingListCommand } from '@shopping-list/commands/handlers/crea
 import { DeleteShoppingListCommand } from '@shopping-list/commands/handlers/delete-shopping-list.handler';
 import { CreateShoppingListDto } from '@shopping-list/dto/create-shopping-list.dto';
 import { UpdateShoppingListDto } from '@shopping-list/dto/update-shopping-list.dto';
+import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
 import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 import { FindAllShoppingListsQuery } from '@shopping-list/queries/handlers/find-all-shopping-lists.handler';
 import { FindShoppingListByIdQuery } from '@shopping-list/queries/handlers/find-shopping-list-by-id.handler';
@@ -37,7 +38,7 @@ export class ShoppingListsController {
   ): Promise<ShoppingListDocument> {
     const shoppingListPayload = new ShoppingList({
       name: shoppingList.name,
-      items: shoppingList.items,
+      items: shoppingList.items.map((item) => new GroceryItem(item)),
     });
 
     return await this.commandBus.execute<
@@ -81,7 +82,7 @@ export class ShoppingListsController {
   ): Promise<ShoppingListDocument | null> {
     const shoppingListUpdate: Partial<ShoppingList> = {
       name: shoppingList.name,
-      items: shoppingList.items,
+      items: shoppingList.items?.map((item) => new GroceryItem(item)),
     };
 
     return await this.commandBus.execute<
