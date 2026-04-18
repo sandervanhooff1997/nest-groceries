@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
 
 @Schema({ _id: false })
 export class GroceryItem {
@@ -8,8 +9,8 @@ export class GroceryItem {
   @Prop({ min: 1 })
   quantity?: number;
 
-  @Prop({ trim: true })
-  unit?: string;
+  @Prop({ enum: GroceryItemUnit })
+  unit?: GroceryItemUnit;
 
   @Prop({ default: false })
   purchased: boolean;

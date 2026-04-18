@@ -3,6 +3,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -10,6 +11,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
 
 class UpdateGroceryItemDto {
   @ApiPropertyOptional({ example: 'Milk' })
@@ -24,10 +26,13 @@ class UpdateGroceryItemDto {
   @Min(1)
   quantity?: number;
 
-  @ApiPropertyOptional({ example: 'liters' })
+  @ApiPropertyOptional({
+    example: GroceryItemUnit.LITER,
+    enum: GroceryItemUnit,
+  })
   @IsOptional()
-  @IsString()
-  unit?: string;
+  @IsEnum(GroceryItemUnit)
+  unit?: GroceryItemUnit;
 
   @ApiPropertyOptional({ example: true })
   @IsOptional()

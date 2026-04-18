@@ -1,9 +1,10 @@
 import type { GroceryItem as GroceryItemDocument } from '../schemas/grocery-item.schema';
+import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
 
 export class GroceryItem {
   name: string;
   quantity?: number;
-  unit?: string;
+  unit?: GroceryItemUnit;
   purchased?: boolean;
 
   constructor(partial?: Partial<GroceryItem>) {
@@ -17,5 +18,13 @@ export class GroceryItem {
       unit: document.unit,
       purchased: document.purchased,
     });
+  }
+
+  get displayName(): string {
+    if (this.quantity === undefined || this.unit === undefined) {
+      return this.name;
+    }
+
+    return `${this.name} ${this.quantity} ${this.unit}`;
   }
 }
