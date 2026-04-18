@@ -55,6 +55,7 @@ const queryHandlers = [
     ShoppingListsController,
     ShoppingListActionsController,
     GroceryItemsController,
+    GroceryItemActionsController,
   ],
   providers: [
     ShoppingListRepository,

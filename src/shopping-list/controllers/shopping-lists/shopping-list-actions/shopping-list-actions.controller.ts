@@ -8,11 +8,11 @@ import { User } from '@shared/decorators/user.decorator';
 import type { User as AuthenticatedUser } from '@shared/entities/user.entity';
 
 @ApiTags('shopping-lists')
-@ApiController('shopping-lists')
+@ApiController('shopping-lists/:id')
 export class ShoppingListActionsController {
   constructor(public readonly commandBus: AuditingCommandBus) {}
 
-  @Post(':id/duplicate')
+  @Post('duplicate')
   @ApiOperation({ summary: 'Duplicate a shopping list for the current user' })
   @ApiCreatedResponse({ description: 'Shopping list duplicated successfully.' })
   async duplicate(
@@ -22,6 +22,7 @@ export class ShoppingListActionsController {
     return await this.commandBus.execute<
       DuplicateShoppingListCommand,
       ShoppingListDocument
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     >(new DuplicateShoppingListCommand(id, user));
   }
 }

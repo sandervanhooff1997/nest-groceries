@@ -1,0 +1,42 @@
+import { Param, Patch } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SetGroceryItemPurchasedStatusCommand } from '../../../commands/handlers/set-grocery-item-purchased-status.handler';
+import type { ShoppingListDocument } from '../../../schemas/shopping-list.schema';
+import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
+import { ApiController } from '@shared/decorators/api-controller.decorator';
+import { User } from '@shared/decorators/user.decorator';
+import type { User as AuthenticatedUser } from '@shared/entities/user.entity';
+
+@ApiTags('shopping-lists')
+@ApiController('shopping-lists/:id/items/:itemId')
+export class GroceryItemActionsController {
+  constructor(public readonly commandBus: AuditingCommandBus) {}
+
+  @Patch('complete')
+  @ApiOperation({ summary: 'Mark a grocery item as complete' })
+  @ApiOkResponse({ description: 'Grocery item marked as complete.' })
+  async completeItem(
+    @Param('id') id: string,
+    @Param('itemId') itemId: string,
+    @User() user: AuthenticatedUser,
+  ): Promise<ShoppingListDocument> {
+    return await this.commandBus.execute<
+      SetGroceryItemPurchasedStatusCommand,
+      ShoppingListDocument
+    >(new SetGroceryItemPurchasedStatusCommand(id, itemId, true, user));
+  }
+
+  @Patch('uncomplete')
+  @ApiOperation({ summary: 'Mark a grocery item as uncomplete' })
+  @ApiOkResponse({ description: 'Grocery item marked as uncomplete.' })
+  async uncompleteItem(
+    @Param('id') id: string,
+    @Param('itemId') itemId: string,
+    @User() user: AuthenticatedUser,
+  ): Promise<ShoppingListDocument> {
+    return await this.commandBus.execute<
+      SetGroceryItemPurchasedStatusCommand,
+      ShoppingListDocument
+    >(new SetGroceryItemPurchasedStatusCommand(id, itemId, false, user));
+  }
+}
