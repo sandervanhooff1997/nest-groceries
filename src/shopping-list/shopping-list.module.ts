@@ -7,7 +7,11 @@ import { AuditingEventBus } from '@shared/buses/auditing-event-bus';
 import { AuditingQueryBus } from '@shared/buses/auditing-query-bus';
 import { shoppingList } from './schemas/shopping-list.schema';
 import { ShoppingList } from './entities/shopping-list.entity';
-import { ShoppingListController } from './controllers/shopping-list.controller';
+import {
+  ShoppingListsController,
+  ShoppingListActionsController,
+  GroceryItemsController,
+} from './controllers';
 import { ShoppingListRepository } from './repositories/shopping-list.repository';
 import { IShoppingListRepository } from './constants/shopping-list.constants';
 
@@ -47,7 +51,11 @@ const queryHandlers = [
       { name: ShoppingList.name, schema: shoppingList },
     ]),
   ],
-  controllers: [ShoppingListController],
+  controllers: [
+    ShoppingListsController,
+    ShoppingListActionsController,
+    GroceryItemsController,
+  ],
   providers: [
     ShoppingListRepository,
     AuditingCommandBus,
