@@ -13,4 +13,9 @@ export const envValidationSchema = Joi.object({
   JWT_EXPIRES_IN: Joi.number().integer().min(1).required(),
   THROTTLE_TTL: Joi.number().integer().min(1).required(),
   THROTTLE_LIMIT: Joi.number().integer().min(1).required(),
+  OPENAPI_SOURCE_URL: Joi.string()
+    .uri({ scheme: ['http', 'https'] })
+    .optional(),
+  OPENAPI_OUTPUT_PATH: Joi.string().optional(),
+  CLIENT_OUTPUT_DIR: Joi.string().optional(),
 });

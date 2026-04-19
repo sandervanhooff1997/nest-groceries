@@ -57,6 +57,33 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## Generate typed frontend client
+
+This project can pull the live OpenAPI schema and generate a TypeScript client automatically.
+
+Configure these values in `.env` (defaults are already in `.env.example`):
+
+- `OPENAPI_SOURCE_URL` (default `http://127.0.0.1:3000/api/docs-json`)
+- `OPENAPI_OUTPUT_PATH` (default `openapi/openapi.json`)
+- `CLIENT_OUTPUT_DIR` (default `../nest-groceries-web/src/api/generated`)
+
+```bash
+# 1) Start the API in one terminal
+$ pnpm run start:dev
+
+# 2) In another terminal, pull OpenAPI + generate client
+$ pnpm run contracts:sync
+```
+
+The scripts read these values from `.env` automatically.
+
+Useful scripts:
+
+- `pnpm run openapi:pull`: downloads OpenAPI JSON from `OPENAPI_SOURCE_URL` to `OPENAPI_OUTPUT_PATH`
+- `pnpm run client:generate`: generates the TS client from `OPENAPI_OUTPUT_PATH` into `CLIENT_OUTPUT_DIR`
+- `pnpm run contracts:sync`: runs both scripts in order
+- `pnpm run contracts:check`: CI guard; fails if generated artifacts are out of date
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

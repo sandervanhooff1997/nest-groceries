@@ -1,5 +1,5 @@
 {
-  "name": "nest-groceries",
+  "name": "nest-groceries-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -24,7 +24,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "openapi:pull": "node scripts/pull-openapi.cjs",
+    "client:generate": "node scripts/generate-client.cjs",
+    "contracts:sync": "pnpm run openapi:pull && pnpm run client:generate",
+    "contracts:check": "pnpm run contracts:sync && git --no-pager diff --exit-code -- openapi/openapi.json generated/api-client"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -65,6 +69,7 @@
     "@types/node": "^24.0.0",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^7.0.0",
+    "dotenv": "^16.6.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
@@ -72,6 +77,7 @@
     "husky": "^9.1.7",
     "jest": "^30.0.0",
     "lint-staged": "^16.4.0",
+    "openapi-typescript-codegen": "^0.29.0",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",

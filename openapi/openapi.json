@@ -1,0 +1,572 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth/token": {
+      "post": {
+        "operationId": "AuthController_issueToken",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "JWT access token issued successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokenResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Issue a JWT access token for a validated user payload",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_checkHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns application health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "status": "healthy",
+                    "timestamp": "zaterdag 18 april 2026 18:35:41",
+                    "services": {
+                      "database": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Check application health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/shopping-lists": {
+      "post": {
+        "operationId": "ShoppingListsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The shopping list has been created."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a shopping list",
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "get": {
+        "operationId": "ShoppingListsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Shopping lists retrieved successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List the current user's shopping lists",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}": {
+      "get": {
+        "operationId": "ShoppingListsController_findById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shopping list retrieved successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a shopping list by id for the current user",
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "patch": {
+        "operationId": "ShoppingListsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shopping list updated successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a shopping list for the current user",
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "delete": {
+        "operationId": "ShoppingListsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shopping list deleted successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a shopping list for the current user",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/duplicate": {
+      "post": {
+        "operationId": "ShoppingListActionsController_duplicate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shopping list duplicated successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Duplicate a shopping list for the current user",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/items": {
+      "post": {
+        "operationId": "GroceryItemsController_addItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroceryItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grocery item added successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add a grocery item to a shopping list",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/items/{itemId}": {
+      "delete": {
+        "operationId": "GroceryItemsController_removeItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grocery item removed successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove a grocery item from a shopping list",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/items/{itemId}/complete": {
+      "patch": {
+        "operationId": "GroceryItemActionsController_completeItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grocery item marked as complete."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark a grocery item as complete",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/items/{itemId}/uncomplete": {
+      "patch": {
+        "operationId": "GroceryItemActionsController_uncompleteItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grocery item marked as uncomplete."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark a grocery item as uncomplete",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Nest Groceries API",
+    "description": "Shopping list management API",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "IssueTokenDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "MongoDB user identifier to embed in the token subject",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "email": {
+            "type": "string",
+            "example": "alex@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alex"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Smith"
+          }
+        },
+        "required": [
+          "userId",
+          "email",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "AuthTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MDdmMWY3N2JjZjg2Y2Q3OTk0MzkwMTEiLCJlbWFpbCI6ImFsZXhAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJBbGV4IiwibGFzdE5hbWUiOiJTbWl0aCIsImlhdCI6MTcxMzM1MDAwMCwiZXhwIjoxNzEzMzUzNjAwfQ.example-signature"
+          },
+          "expiresIn": {
+            "type": "string",
+            "example": "3600"
+          }
+        },
+        "required": [
+          "tokenType",
+          "accessToken",
+          "expiresIn"
+        ]
+      },
+      "GroceryItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Milk"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 2
+          },
+          "unit": {
+            "type": "string",
+            "example": "Liter",
+            "enum": [
+              "Piece(s)",
+              "Gram",
+              "Kilogram",
+              "Liter",
+              "Milliliter"
+            ]
+          },
+          "purchased": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Weekly groceries"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroceryItemDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "items"
+        ]
+      },
+      "UpdateGroceryItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Milk"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 2
+          },
+          "unit": {
+            "type": "string",
+            "example": "Liter",
+            "enum": [
+              "Piece(s)",
+              "Gram",
+              "Kilogram",
+              "Liter",
+              "Milliliter"
+            ]
+          },
+          "purchased": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "UpdateShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Weekend groceries"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateGroceryItemDto"
+            }
+          }
+        }
+      },
+      "DuplicateShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "itemIds": {
+            "description": "Optional list of item IDs to duplicate. If omitted, all items are duplicated.",
+            "example": [
+              "507f1f77bcf86cd799439011"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
