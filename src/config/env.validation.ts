@@ -9,8 +9,6 @@ export const envValidationSchema = Joi.object({
     .uri({ scheme: ['mongodb', 'mongodb+srv'] })
     .required(),
   ALLOWED_ORIGINS: Joi.string().required(),
-  JWT_SECRET: Joi.string().min(32).required(),
-  JWT_EXPIRES_IN: Joi.number().integer().min(1).required(),
   THROTTLE_TTL: Joi.number().integer().min(1).required(),
   THROTTLE_LIMIT: Joi.number().integer().min(1).required(),
   OPENAPI_SOURCE_URL: Joi.string()
@@ -18,4 +16,16 @@ export const envValidationSchema = Joi.object({
     .optional(),
   OPENAPI_OUTPUT_PATH: Joi.string().optional(),
   CLIENT_OUTPUT_DIR: Joi.string().optional(),
+  KINDE_ISSUER_URL: Joi.string()
+    .uri({ scheme: ['http', 'https'] })
+    .required(),
+  KINDE_AUDIENCE: Joi.string().optional(),
+  KINDE_CLIENT_ID: Joi.string().required(),
+  KINDE_SITE_URL: Joi.string()
+    .uri({ scheme: ['http', 'https'] })
+    .required(),
+  KINDE_REDIRECT_URL: Joi.string()
+    .uri({ scheme: ['http', 'https'] })
+    .required(),
+  KINDE_SECRET: Joi.string().required(),
 });

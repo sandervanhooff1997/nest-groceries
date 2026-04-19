@@ -1,23 +1,18 @@
 import {
+  CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
-import type { Observable } from 'rxjs';
 import { IS_PUBLIC_ROUTE_KEY } from '@auth/decorators/public.decorator';
-import type { User } from '../entities/user.entity';
+import type { AuthenticatedRequest } from '../interfaces/authenticated-request.interface';
 
 @Injectable()
-export class AuthenticatedGuard extends AuthGuard('jwt') {
-  constructor(private readonly reflector: Reflector) {
-    super();
-  }
+export class AuthenticatedGuard implements CanActivate {
+  constructor(private readonly reflector: Reflector) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.getAllAndOverride<boolean>(
       IS_PUBLIC_ROUTE_KEY,
       [context.getHandler(), context.getClass()],
@@ -27,26 +22,12 @@ export class AuthenticatedGuard extends AuthGuard('jwt') {
       return true;
     }
 
-    return super.canActivate(context);
-  }
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
 
-  handleRequest<TUser = User>(
-    err: unknown,
-    user: TUser | false,
-    _info: unknown,
-    _context: ExecutionContext,
-  ): TUser {
-    void _info;
-    void _context;
-
-    if (err instanceof Error) {
-      throw err;
-    }
-
-    if (!user) {
+    if (!request.user?.id && !request.user?._id) {
       throw new UnauthorizedException('Missing or invalid bearer token');
     }
 
-    return user;
+    return true;
   }
 }

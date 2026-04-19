@@ -31,6 +31,7 @@
     "contracts:check": "pnpm run contracts:sync && git --no-pager diff --exit-code -- openapi/openapi.json generated/api-client"
   },
   "dependencies": {
+    "@kinde-oss/kinde-node-express": "^1.6.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
