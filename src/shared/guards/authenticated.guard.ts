@@ -24,7 +24,7 @@ export class AuthenticatedGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
 
-    if (!request.user?.id && !request.user?._id) {
+    if (!request.user?._id) {
       throw new UnauthorizedException('Missing or invalid bearer token');
     }
 

@@ -11,7 +11,7 @@ import {
 } from '@test/e2e/create-e2e-app';
 
 export const E2E_SHOPPING_LIST_USER = new User({
-  _id: new Types.ObjectId(),
+  _id: new Types.ObjectId().toString(),
   email: 'shopping-list-e2e@example.com',
   firstName: 'Shopping',
   lastName: 'Tester',

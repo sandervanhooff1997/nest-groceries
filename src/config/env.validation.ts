@@ -19,13 +19,8 @@ export const envValidationSchema = Joi.object({
   KINDE_ISSUER_URL: Joi.string()
     .uri({ scheme: ['http', 'https'] })
     .required(),
+  // Either KINDE_AUDIENCE or KINDE_CLIENT_ID must be set so the Kinde
+  // middleware can pin token validation to this API.
   KINDE_AUDIENCE: Joi.string().optional(),
-  KINDE_CLIENT_ID: Joi.string().required(),
-  KINDE_SITE_URL: Joi.string()
-    .uri({ scheme: ['http', 'https'] })
-    .required(),
-  KINDE_REDIRECT_URL: Joi.string()
-    .uri({ scheme: ['http', 'https'] })
-    .required(),
-  KINDE_SECRET: Joi.string().required(),
-});
+  KINDE_CLIENT_ID: Joi.string().optional(),
+}).or('KINDE_AUDIENCE', 'KINDE_CLIENT_ID');

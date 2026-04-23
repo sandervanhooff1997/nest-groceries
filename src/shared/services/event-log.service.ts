@@ -12,9 +12,17 @@ export class EventLogService {
   ) {}
 
   async log(auditable: IAuditable, operation: string): Promise<void> {
+    // Defensive: guards upstream already enforce a non-empty _id, but we'd
+    // rather skip the audit write than crash an otherwise-successful request
+    // if something changes and the user shape is malformed.
+    const userId = auditable.user?._id?.toString();
+    if (!userId) {
+      return;
+    }
+
     await this.eventLogModel.create({
       operation,
-      userId: auditable.user._id.toString(),
+      userId,
       userEmail: auditable.user.email,
     });
   }
