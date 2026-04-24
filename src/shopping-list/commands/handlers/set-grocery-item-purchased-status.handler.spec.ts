@@ -51,10 +51,8 @@ describe('SetGroceryItemPurchasedStatusHandler', () => {
       ),
     );
 
-    expect(repository.findByIdForUser.bind(repository)).toHaveBeenCalledWith(
-      'list-id',
-      user,
-    );
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(repository.findByIdForUser).toHaveBeenCalledWith('list-id', user);
     expect(setItemPurchasedForUser).toHaveBeenCalledWith(
       'list-id',
       user,
