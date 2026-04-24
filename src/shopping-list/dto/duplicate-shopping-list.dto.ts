@@ -1,5 +1,34 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ArrayUnique, IsArray, IsMongoId, IsOptional } from 'class-validator';
+import {
+  ArrayUnique,
+  IsArray,
+  IsEnum,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
+
+export class ItemOverrideDto {
+  @ApiPropertyOptional({ example: '507f1f77bcf86cd799439011' })
+  @IsMongoId()
+  id: string;
+
+  @ApiPropertyOptional({ example: 2 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  quantity?: number;
+
+  @ApiPropertyOptional({ enum: GroceryItemUnit })
+  @IsOptional()
+  @IsEnum(GroceryItemUnit)
+  unit?: GroceryItemUnit;
+}
 
 export class DuplicateShoppingListDto {
   @ApiPropertyOptional({
@@ -14,4 +43,15 @@ export class DuplicateShoppingListDto {
   @ArrayUnique()
   @IsMongoId({ each: true })
   itemIds?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Per-item quantity/unit overrides applied during duplication.',
+    type: () => ItemOverrideDto,
+    isArray: true,
+  })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemOverrideDto)
+  itemOverrides?: ItemOverrideDto[];
 }

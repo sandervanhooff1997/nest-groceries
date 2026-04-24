@@ -1,38 +1,6 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/auth/token": {
-      "post": {
-        "operationId": "AuthController_issueToken",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/IssueTokenDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "JWT access token issued successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthTokenResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Issue a JWT access token for a validated user payload",
-        "tags": [
-          "auth"
-        ]
-      }
-    },
     "/api/health": {
       "get": {
         "operationId": "HealthController_checkHealth",
@@ -45,7 +13,7 @@
                 "schema": {
                   "example": {
                     "status": "healthy",
-                    "timestamp": "zaterdag 18 april 2026 18:35:41",
+                    "timestamp": "vrijdag 24 april 2026 08:02:45",
                     "services": {
                       "database": "ok"
                     }
@@ -241,6 +209,84 @@
         ]
       }
     },
+    "/api/shopping-lists/{id}/share": {
+      "post": {
+        "operationId": "ShoppingListActionsController_share",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShareShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shopping list shared successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Share a shopping list with another user",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/remove-access": {
+      "post": {
+        "operationId": "ShoppingListActionsController_removeAccess",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveAccessDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access removed successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove access to a shopping list from a user",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
     "/api/shopping-lists/{id}/items": {
       "post": {
         "operationId": "GroceryItemsController_addItem",
@@ -312,6 +358,91 @@
           }
         ],
         "summary": "Remove a grocery item from a shopping list",
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "patch": {
+        "operationId": "GroceryItemActionsController_updateItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGroceryItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Grocery item updated successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a grocery item",
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/shopping-lists/{id}/items/reorder": {
+      "patch": {
+        "description": "Supply all item IDs in the desired order. Each item receives an `order` value equal to its index in the array.",
+        "operationId": "GroceryItemsController_reorderItems",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderGroceryItemsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Items reordered successfully."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reorder grocery items in a shopping list",
         "tags": [
           "shopping-lists"
         ]
@@ -409,56 +540,6 @@
       }
     },
     "schemas": {
-      "IssueTokenDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "description": "MongoDB user identifier to embed in the token subject",
-            "example": "507f1f77bcf86cd799439011"
-          },
-          "email": {
-            "type": "string",
-            "example": "alex@example.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Alex"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Smith"
-          }
-        },
-        "required": [
-          "userId",
-          "email",
-          "firstName",
-          "lastName"
-        ]
-      },
-      "AuthTokenResponseDto": {
-        "type": "object",
-        "properties": {
-          "tokenType": {
-            "type": "string",
-            "example": "Bearer"
-          },
-          "accessToken": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MDdmMWY3N2JjZjg2Y2Q3OTk0MzkwMTEiLCJlbWFpbCI6ImFsZXhAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJBbGV4IiwibGFzdE5hbWUiOiJTbWl0aCIsImlhdCI6MTcxMzM1MDAwMCwiZXhwIjoxNzEzMzUzNjAwfQ.example-signature"
-          },
-          "expiresIn": {
-            "type": "string",
-            "example": "3600"
-          }
-        },
-        "required": [
-          "tokenType",
-          "accessToken",
-          "expiresIn"
-        ]
-      },
       "GroceryItemDto": {
         "type": "object",
         "properties": {
@@ -502,6 +583,14 @@
             "items": {
               "$ref": "#/components/schemas/GroceryItemDto"
             }
+          },
+          "isTemplate": {
+            "type": "boolean",
+            "example": false
+          },
+          "fromTemplateId": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
           }
         },
         "required": [
@@ -522,7 +611,6 @@
           },
           "unit": {
             "type": "string",
-            "example": "Liter",
             "enum": [
               "Piece(s)",
               "Gram",
@@ -530,10 +618,6 @@
               "Liter",
               "Milliliter"
             ]
-          },
-          "purchased": {
-            "type": "boolean",
-            "example": true
           }
         }
       },
@@ -549,6 +633,33 @@
             "items": {
               "$ref": "#/components/schemas/UpdateGroceryItemDto"
             }
+          },
+          "isTemplate": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ItemOverrideDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 2
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "Piece(s)",
+              "Gram",
+              "Kilogram",
+              "Liter",
+              "Milliliter"
+            ]
           }
         }
       },
@@ -564,8 +675,42 @@
             "items": {
               "type": "string"
             }
+          },
+          "itemOverrides": {
+            "description": "Per-item quantity/unit overrides applied during duplication.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemOverrideDto"
+            }
           }
         }
+      },
+      "ShareShoppingListDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "RemoveAccessDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ReorderGroceryItemsDto": {
+        "type": "object",
+        "properties": {
+          "itemIds": {
+            "description": "All item IDs in the desired order (must include every item)",
+            "example": [
+              "64b1f...",
+              "64b2a..."
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "itemIds"
+        ]
       }
     }
   }

@@ -54,4 +54,10 @@ export class UpdateShoppingListDto {
   @ValidateNested({ each: true })
   @Type(() => UpdateGroceryItemDto)
   items?: UpdateGroceryItemDto[];
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isTemplate?: boolean;
 }

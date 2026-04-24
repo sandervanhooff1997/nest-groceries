@@ -29,21 +29,27 @@ describe('DuplicateShoppingListHandler', () => {
       name: 'Weekly groceries',
       nextId: 'source-list-id',
       items: [GroceryItemFactory.create({ name: 'Milk' })],
-      createdBy: user._id.toString(),
-      updatedBy: user._id.toString(),
+      createdBy: user.userId,
+      updatedBy: user.userId,
     });
 
     const findByIdForUser = jest.fn().mockResolvedValue(sourceList);
     const create = jest.fn().mockResolvedValue(duplicatedList);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create,
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser,
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new DuplicateShoppingListHandler(repository);
 
@@ -51,16 +57,13 @@ describe('DuplicateShoppingListHandler', () => {
       new DuplicateShoppingListCommand('source-list-id', user),
     );
 
-    expect(findByIdForUser).toHaveBeenCalledWith(
-      'source-list-id',
-      user._id.toString(),
-    );
+    expect(findByIdForUser).toHaveBeenCalledWith('source-list-id', user);
     expect(create).toHaveBeenCalledWith(
       expect.objectContaining({
         name: sourceList.name,
         nextId: sourceList._id,
-        createdBy: user._id.toString(),
-        updatedBy: user._id.toString(),
+        createdBy: user.userId,
+        updatedBy: user.userId,
       }),
     );
     expect(result).toEqual(duplicatedList);
@@ -69,13 +72,19 @@ describe('DuplicateShoppingListHandler', () => {
   it('should throw when duplicating a non-owned shopping list', async () => {
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn().mockResolvedValue(null),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new DuplicateShoppingListHandler(repository);
 
@@ -102,13 +111,19 @@ describe('DuplicateShoppingListHandler', () => {
       .mockImplementation((shoppingList: ShoppingList) => shoppingList);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create,
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser,
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new DuplicateShoppingListHandler(repository);
 
@@ -116,10 +131,7 @@ describe('DuplicateShoppingListHandler', () => {
       new DuplicateShoppingListCommand('source-list-id', user, ['item-bread']),
     );
 
-    expect(findByIdForUser).toHaveBeenCalledWith(
-      'source-list-id',
-      user._id.toString(),
-    );
+    expect(findByIdForUser).toHaveBeenCalledWith('source-list-id', user);
     expect(result.items).toHaveLength(1);
     expect(result.items[0]?._id).toBe('item-bread');
   });

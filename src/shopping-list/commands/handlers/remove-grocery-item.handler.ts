@@ -22,10 +22,9 @@ export class RemoveGroceryItemHandler implements ICommandHandler<RemoveGroceryIt
   ) {}
 
   async execute(command: RemoveGroceryItemCommand): Promise<ShoppingList> {
-    const userId = command.user._id.toString();
     const shoppingList = await this.repository.removeItemForUser(
       command.id,
-      userId,
+      command.user,
       command.itemId,
     );
 

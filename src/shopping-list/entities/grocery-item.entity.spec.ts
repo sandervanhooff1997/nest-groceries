@@ -32,6 +32,7 @@ describe('GroceryItem', () => {
       quantity: 500,
       unit: GroceryItemUnit.GRAM,
       purchased: false,
+      order: 0,
     };
 
     const item = GroceryItem.fromDocument(itemDocument);

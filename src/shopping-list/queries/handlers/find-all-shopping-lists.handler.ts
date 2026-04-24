@@ -17,8 +17,6 @@ export class FindAllShoppingListsHandler implements IQueryHandler<FindAllShoppin
   ) {}
 
   async execute(query: FindAllShoppingListsQuery) {
-    const userId = query.user._id.toString();
-
-    return await this.repository.findAllByUser(userId);
+    return await this.repository.findAllAccessibleByUser(query.user);
   }
 }

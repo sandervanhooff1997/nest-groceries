@@ -20,10 +20,9 @@ export class DeleteShoppingListHandler implements ICommandHandler<DeleteShopping
   ) {}
 
   async execute(command: DeleteShoppingListCommand) {
-    const userId = command.user._id.toString();
     const shoppingList = await this.repository.deleteForUser(
       command.id,
-      userId,
+      command.user,
     );
 
     if (!shoppingList) {

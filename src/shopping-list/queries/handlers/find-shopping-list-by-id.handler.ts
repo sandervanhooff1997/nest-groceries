@@ -20,10 +20,9 @@ export class FindShoppingListByIdHandler implements IQueryHandler<FindShoppingLi
   ) {}
 
   async execute(query: FindShoppingListByIdQuery) {
-    const userId = query.user._id.toString();
     const shoppingList = await this.repository.findByIdForUser(
       query.id,
-      userId,
+      query.user,
     );
 
     if (!shoppingList) {

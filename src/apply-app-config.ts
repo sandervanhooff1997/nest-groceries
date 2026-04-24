@@ -11,7 +11,7 @@ import { User } from '@shared/entities/user.entity';
 
 // Paths (relative to the global '/api' prefix) that should skip Kinde JWT verification.
 // Keep this in sync with controllers marked with @Public().
-const PUBLIC_API_PATH_REGEX = /^\/(health|docs)(\/|$)/;
+const PUBLIC_API_PATH_REGEX = /^\/(health|docs|docs-json)(\/|$)/;
 
 // Kinde's jwtVerify sets req.user = { id: sub }. The rest of the app wants a
 // richer shape (the User entity) so it can log emails, construct audit trails,
@@ -51,7 +51,7 @@ function hydrateUserFromKindeToken(
     typeof payload?.family_name === 'string' ? payload.family_name : undefined;
 
   req.user = new User({
-    _id: sub,
+    userId: sub,
     email,
     firstName: givenName,
     lastName: familyName,

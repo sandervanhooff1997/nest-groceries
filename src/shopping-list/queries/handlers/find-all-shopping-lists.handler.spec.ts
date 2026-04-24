@@ -16,22 +16,28 @@ describe('FindAllShoppingListsHandler', () => {
     const expectedLists = [
       ShoppingListFactory.create({ name: 'Weekly groceries' }),
     ];
-    const findAllByUser = jest.fn().mockResolvedValue(expectedLists);
+    const findAllAccessibleByUser = jest.fn().mockResolvedValue(expectedLists);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser,
+      findById: jest.fn(),
+      findAllAccessibleByUser,
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new FindAllShoppingListsHandler(repository);
 
     const result = await handler.execute(new FindAllShoppingListsQuery(user));
 
-    expect(findAllByUser).toHaveBeenCalledWith(user._id.toString());
+    expect(findAllAccessibleByUser).toHaveBeenCalledWith(user);
     expect(result).toEqual(expectedLists);
   });
 });

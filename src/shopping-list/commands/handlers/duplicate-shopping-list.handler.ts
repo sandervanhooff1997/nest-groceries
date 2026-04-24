@@ -4,14 +4,22 @@ import { IShoppingListRepository } from '../../constants/shopping-list.constants
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
+import type { GroceryItemUnit } from '@shopping-list/enums/grocery-item-unit.enum';
 import type { IAuditable } from '@shared/interfaces/auditable.interface';
 import type { User } from '@shared/entities/user.entity';
+
+export interface ItemOverride {
+  id: string;
+  quantity?: number;
+  unit?: GroceryItemUnit;
+}
 
 export class DuplicateShoppingListCommand implements IAuditable {
   constructor(
     public readonly id: string,
     public readonly user: User,
     public readonly itemIds?: string[],
+    public readonly itemOverrides?: ItemOverride[],
   ) {}
 }
 
@@ -23,10 +31,9 @@ export class DuplicateShoppingListHandler implements ICommandHandler<DuplicateSh
   ) {}
 
   async execute(command: DuplicateShoppingListCommand): Promise<ShoppingList> {
-    const userId = command.user._id.toString();
     const sourceShoppingList = await this.repository.findByIdForUser(
       command.id,
-      userId,
+      command.user,
     );
 
     if (!sourceShoppingList) {
@@ -45,12 +52,26 @@ export class DuplicateShoppingListHandler implements ICommandHandler<DuplicateSh
         )
       : sourceItems;
 
+    const overrideMap = new Map(
+      (command.itemOverrides ?? []).map((o) => [o.id, o]),
+    );
+
     const duplicatedShoppingList = new ShoppingList({
       name: sourceShoppingList.name,
       nextId: sourceShoppingList._id,
-      items: itemsToDuplicate.map((item) => new GroceryItem({ ...item })),
-      createdBy: userId,
-      updatedBy: userId,
+      items: itemsToDuplicate.map((item) => {
+        const override = item._id ? overrideMap.get(item._id) : undefined;
+        return new GroceryItem({
+          ...item,
+          purchased: false,
+          ...(override?.quantity !== undefined && {
+            quantity: override.quantity,
+          }),
+          ...(override?.unit !== undefined && { unit: override.unit }),
+        });
+      }),
+      createdBy: command.user.userId,
+      updatedBy: command.user.userId,
     });
 
     return await this.repository.create(duplicatedShoppingList);

@@ -1,15 +1,14 @@
 export class User {
-  /**
-   * Stable per-user identifier. When tokens come from Kinde this is the `sub`
-   * claim (a string like `kp_...`), not a Mongo ObjectId. Consumers call
-   * `_id.toString()` pervasively, which is still safe on a string.
-   */
-  _id: string;
+  /** Internal Mongo ObjectId (as string). Undefined until the user is persisted. */
+  _id?: string;
+  /** Stable external identifier from Kinde — the `sub` claim on the JWT. */
+  userId: string;
   email?: string;
   firstName?: string;
   lastName?: string;
 
   constructor(partial?: Partial<User>) {
+    this.userId = '';
     Object.assign(this, partial);
   }
 

@@ -2,35 +2,36 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
-import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
 import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 import type { IAuditable } from '@shared/interfaces/auditable.interface';
 import type { User } from '@shared/entities/user.entity';
 
-export class AddGroceryItemCommand implements IAuditable {
+export class ReorderGroceryItemsCommand implements IAuditable {
   constructor(
     public readonly id: string,
-    public readonly item: GroceryItem,
+    public readonly itemIds: string[],
     public readonly user: User,
   ) {}
 }
 
-@CommandHandler(AddGroceryItemCommand)
-export class AddGroceryItemHandler implements ICommandHandler<AddGroceryItemCommand> {
+@CommandHandler(ReorderGroceryItemsCommand)
+export class ReorderGroceryItemsHandler implements ICommandHandler<ReorderGroceryItemsCommand> {
   constructor(
     @Inject(IShoppingListRepository)
     private readonly repository: ShoppingListRepositoryPort,
   ) {}
 
-  async execute(command: AddGroceryItemCommand): Promise<ShoppingList> {
-    const shoppingList = await this.repository.addItemForUser(
+  async execute(command: ReorderGroceryItemsCommand): Promise<ShoppingList> {
+    const shoppingList = await this.repository.reorderItemsForUser(
       command.id,
       command.user,
-      command.item,
+      command.itemIds,
     );
 
     if (!shoppingList) {
-      throw new NotFoundException('Shopping list not found');
+      throw new NotFoundException(
+        'Shopping list not found or item IDs do not match',
+      );
     }
 
     return shoppingList;

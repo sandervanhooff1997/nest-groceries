@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Inject, NotFoundException } from '@nestjs/common';
+import { Inject, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { IShoppingListRepository } from '../../constants/shopping-list.constants';
 import type { IShoppingListRepository as ShoppingListRepositoryPort } from '../../interfaces/shopping-list.repository.interface';
 import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
@@ -25,10 +25,22 @@ export class SetGroceryItemPurchasedStatusHandler implements ICommandHandler<Set
   async execute(
     command: SetGroceryItemPurchasedStatusCommand,
   ): Promise<ShoppingList> {
-    const userId = command.user._id.toString();
+    const list = await this.repository.findByIdForUser(
+      command.id,
+      command.user,
+    );
+
+    if (!list) {
+      throw new NotFoundException('Shopping list or grocery item not found');
+    }
+
+    if (list.isTemplate) {
+      throw new ForbiddenException('Cannot purchase items on a template list');
+    }
+
     const shoppingList = await this.repository.setItemPurchasedForUser(
       command.id,
-      userId,
+      command.user,
       command.itemId,
       command.purchased,
     );

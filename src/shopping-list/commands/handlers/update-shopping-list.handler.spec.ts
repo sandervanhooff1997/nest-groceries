@@ -21,13 +21,19 @@ describe('UpdateShoppingListHandler', () => {
     const updateForUser = jest.fn().mockResolvedValue(updatedList);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser,
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new UpdateShoppingListHandler(repository);
 
@@ -37,11 +43,8 @@ describe('UpdateShoppingListHandler', () => {
 
     expect(updateForUser).toHaveBeenCalledWith(
       'list-id',
-      user._id.toString(),
-      expect.objectContaining({
-        name: 'Updated',
-        updatedBy: user._id.toString(),
-      }),
+      user,
+      expect.objectContaining({ name: 'Updated' }),
     );
     expect(result).toEqual(updatedList);
   });
@@ -49,13 +52,19 @@ describe('UpdateShoppingListHandler', () => {
   it('should throw when updating a non-owned shopping list', async () => {
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn().mockResolvedValue(null),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new UpdateShoppingListHandler(repository);
 

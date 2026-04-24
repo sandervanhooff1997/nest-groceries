@@ -18,13 +18,19 @@ describe('RemoveGroceryItemHandler', () => {
     const removeItemForUser = jest.fn().mockResolvedValue(updatedList);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser,
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new RemoveGroceryItemHandler(repository);
 
@@ -32,24 +38,26 @@ describe('RemoveGroceryItemHandler', () => {
       new RemoveGroceryItemCommand('list-id', 'item-id', user),
     );
 
-    expect(removeItemForUser).toHaveBeenCalledWith(
-      'list-id',
-      user._id.toString(),
-      'item-id',
-    );
+    expect(removeItemForUser).toHaveBeenCalledWith('list-id', user, 'item-id');
     expect(result).toEqual(updatedList);
   });
 
   it('should throw when list or item is not found', async () => {
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn(),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn().mockResolvedValue(null),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new RemoveGroceryItemHandler(repository);
 

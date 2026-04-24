@@ -52,4 +52,24 @@ export class CreateShoppingListDto {
   @ValidateNested({ each: true })
   @Type(() => GroceryItemDto)
   items: GroceryItemDto[];
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isTemplate?: boolean;
+
+  @ApiPropertyOptional({ example: '507f1f77bcf86cd799439011' })
+  @IsOptional()
+  @IsString()
+  fromTemplateId?: string;
+
+  @ApiPropertyOptional({
+    example: ['507f1f77bcf86cd799439011', '507f1f77bcf86cd799439012'],
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  fromTemplateIds?: string[];
 }

@@ -39,12 +39,21 @@ export class ShoppingListsController {
     const shoppingListPayload = new ShoppingList({
       name: shoppingList.name,
       items: shoppingList.items.map((item) => new GroceryItem(item)),
+      isTemplate: shoppingList.isTemplate ?? false,
     });
 
+    // Pass both single and multi-template fields
     return await this.commandBus.execute<
       CreateShoppingListCommand,
       ShoppingListDocument
-    >(new CreateShoppingListCommand(shoppingListPayload, user));
+    >(
+      new CreateShoppingListCommand(
+        shoppingListPayload,
+        user,
+        shoppingList.fromTemplateId,
+        shoppingList.fromTemplateIds,
+      ),
+    );
   }
 
   @Get()
@@ -83,6 +92,7 @@ export class ShoppingListsController {
     const shoppingListUpdate: Partial<ShoppingList> = {
       name: shoppingList.name,
       items: shoppingList.items?.map((item) => new GroceryItem(item)),
+      isTemplate: shoppingList.isTemplate,
     };
 
     return await this.commandBus.execute<

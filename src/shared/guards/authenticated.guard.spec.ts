@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import type { ExecutionContext } from '@nestjs/common';
 import { AuthenticatedGuard } from './authenticated.guard';
 
-function createExecutionContext(user?: { _id: string }): ExecutionContext {
+function createExecutionContext(user?: { userId: string }): ExecutionContext {
   return {
     getClass: () => AuthenticatedGuard,
     getHandler: () => createExecutionContext,
@@ -37,7 +37,7 @@ describe('AuthenticatedGuard', () => {
   });
 
   it('should allow requests when Kinde middleware attached a user', () => {
-    const context = createExecutionContext({ _id: 'kp_user_123' });
+    const context = createExecutionContext({ userId: 'kp_user_123' });
 
     (reflector.getAllAndOverride as jest.Mock).mockReturnValue(false);
 

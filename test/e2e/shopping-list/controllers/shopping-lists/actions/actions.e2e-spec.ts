@@ -28,7 +28,7 @@ describe('ShoppingListActionsController (e2e)', () => {
     expect(duplicated.name).toBe(source.name);
     expect(duplicated.nextId).toBe(source._id);
     expect(duplicated.items).toHaveLength(source.items.length);
-    expect(duplicated.createdBy).toBe(E2E_SHOPPING_LIST_USER._id.toString());
+    expect(duplicated.createdBy).toBe(E2E_SHOPPING_LIST_USER.userId);
 
     const sourceAfterDuplication = await request(e2e.httpServer())
       .get(`/api/shopping-lists/${source._id}`)

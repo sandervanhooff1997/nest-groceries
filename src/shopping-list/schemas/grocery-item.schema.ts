@@ -17,6 +17,9 @@ export class GroceryItem {
 
   @Prop({ default: false })
   purchased: boolean;
+
+  @Prop({ required: true, min: 0 })
+  order: number;
 }
 
 export const groceryItem = SchemaFactory.createForClass(GroceryItem);

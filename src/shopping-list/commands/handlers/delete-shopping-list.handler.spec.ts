@@ -21,13 +21,19 @@ describe('DeleteShoppingListHandler', () => {
     const deleteForUser = jest.fn().mockResolvedValue(deletedList);
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser,
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new DeleteShoppingListHandler(repository);
 
@@ -35,20 +41,26 @@ describe('DeleteShoppingListHandler', () => {
       new DeleteShoppingListCommand('list-id', user),
     );
 
-    expect(deleteForUser).toHaveBeenCalledWith('list-id', user._id.toString());
+    expect(deleteForUser).toHaveBeenCalledWith('list-id', user);
     expect(result).toEqual(deletedList);
   });
 
   it('should throw when deleting a non-owned shopping list', async () => {
     const repository: jest.Mocked<IShoppingListRepository> = {
       create: jest.fn(),
-      findAllByUser: jest.fn(),
+      findById: jest.fn(),
+      findAllAccessibleByUser: jest.fn(),
       findByIdForUser: jest.fn(),
       updateForUser: jest.fn(),
       deleteForUser: jest.fn().mockResolvedValue(null),
+      addOwner: jest.fn(),
+      addParticipant: jest.fn(),
+      removeMember: jest.fn(),
       addItemForUser: jest.fn(),
       removeItemForUser: jest.fn(),
       setItemPurchasedForUser: jest.fn(),
+      reorderItemsForUser: jest.fn(),
+      updateItemForUser: jest.fn(),
     };
     const handler = new DeleteShoppingListHandler(repository);
 

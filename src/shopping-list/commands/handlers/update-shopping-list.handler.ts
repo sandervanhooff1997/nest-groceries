@@ -22,14 +22,10 @@ export class UpdateShoppingListHandler implements ICommandHandler<UpdateShopping
   ) {}
 
   async execute(command: UpdateShoppingListCommand) {
-    const userId = command.user._id.toString();
     const shoppingList = await this.repository.updateForUser(
       command.id,
-      userId,
-      {
-        ...command.shoppingList,
-        updatedBy: userId,
-      },
+      command.user,
+      command.shoppingList,
     );
 
     if (!shoppingList) {

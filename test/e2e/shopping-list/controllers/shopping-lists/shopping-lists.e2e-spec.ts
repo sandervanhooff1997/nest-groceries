@@ -30,7 +30,7 @@ describe('ShoppingListsController (e2e)', () => {
 
     expect(createdList.name).toBe('Weekly groceries');
     expect(createdList.items).toHaveLength(1);
-    expect(createdList.createdBy).toBe(E2E_SHOPPING_LIST_USER._id.toString());
+    expect(createdList.createdBy).toBe(E2E_SHOPPING_LIST_USER.userId);
 
     const listResponse = await request(e2e.httpServer())
       .get('/api/shopping-lists')

@@ -1,4 +1,4 @@
-import { Body, Delete, Post, Param } from '@nestjs/common';
+import { Body, Delete, Post, Patch, Param } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -7,7 +7,9 @@ import {
 } from '@nestjs/swagger';
 import { AddGroceryItemCommand } from '@shopping-list/commands/handlers/add-grocery-item.handler';
 import { RemoveGroceryItemCommand } from '@shopping-list/commands/handlers/remove-grocery-item.handler';
+import { ReorderGroceryItemsCommand } from '@shopping-list/commands/handlers/reorder-grocery-items.handler';
 import { GroceryItemDto } from '@shopping-list/dto/create-shopping-list.dto';
+import { ReorderGroceryItemsDto } from '@shopping-list/dto/reorder-grocery-items.dto';
 import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
 import type { ShoppingListDocument } from '@shopping-list/schemas/shopping-list.schema';
 import { AuditingCommandBus } from '@shared/buses/auditing-command-bus';
@@ -46,5 +48,23 @@ export class GroceryItemsController {
       RemoveGroceryItemCommand,
       ShoppingListDocument
     >(new RemoveGroceryItemCommand(id, itemId, user));
+  }
+
+  @Patch('reorder')
+  @ApiOperation({
+    summary: 'Reorder grocery items in a shopping list',
+    description:
+      'Supply all item IDs in the desired order. Each item receives an `order` value equal to its index in the array.',
+  })
+  @ApiOkResponse({ description: 'Items reordered successfully.' })
+  async reorderItems(
+    @Param('id') id: string,
+    @Body() dto: ReorderGroceryItemsDto,
+    @User() user: AuthenticatedUser,
+  ): Promise<ShoppingListDocument> {
+    return await this.commandBus.execute<
+      ReorderGroceryItemsCommand,
+      ShoppingListDocument
+    >(new ReorderGroceryItemsCommand(id, dto.itemIds, user));
   }
 }
