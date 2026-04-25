@@ -41,7 +41,7 @@ describe('AddGroceryItemHandler', () => {
 
     const categorizer = {
       categorize: jest.fn().mockReturnValue(null),
-    } as jest.Mocked<ItemCategorizerService>;
+    } as any as ItemCategorizerService;
 
     const handler = new AddGroceryItemHandler(repository, categorizer);
 
@@ -73,7 +73,7 @@ describe('AddGroceryItemHandler', () => {
 
     const categorizer = {
       categorize: jest.fn().mockReturnValue(null),
-    } as jest.Mocked<ItemCategorizerService>;
+    } as any as ItemCategorizerService;
 
     const handler = new AddGroceryItemHandler(repository, categorizer);
 

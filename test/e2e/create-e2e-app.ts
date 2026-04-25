@@ -7,6 +7,7 @@ import {
   type TestingModuleBuilder,
 } from '@nestjs/testing';
 import { ConnectionStates, type Connection } from 'mongoose';
+import { User } from '../../src/shared/entities/user.entity';
 import { applyAppConfig } from '../../src/apply-app-config';
 import { E2eAppModule } from './e2e-app.module';
 import {
@@ -55,6 +56,21 @@ export async function createE2eApp(
 
   // Enable test mode to skip JWT verification in middleware
   process.env.NODE_ENV = 'test';
+
+  // Add test user middleware BEFORE applyAppConfig so it runs first
+  // This ensures req.user is set before the JWT verification middleware
+  app.use((req: any, _res: any, next: () => void) => {
+    // Set a test user if none exists
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (!req.user) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      req.user = new User({
+        userId: 'e2e-test-user',
+        email: 'e2e@example.com',
+      });
+    }
+    next();
+  });
 
   applyAppConfig(app);
   await app.init();

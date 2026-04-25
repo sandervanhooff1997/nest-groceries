@@ -12,6 +12,7 @@ import {
 
 export const E2E_SHOPPING_LIST_USER = new User({
   _id: new Types.ObjectId().toString(),
+  userId: 'kinde-user-id-123',
   email: 'shopping-list-e2e@example.com',
   firstName: 'Shopping',
   lastName: 'Tester',
