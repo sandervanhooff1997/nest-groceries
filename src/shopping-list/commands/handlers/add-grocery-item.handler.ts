@@ -6,6 +6,7 @@ import { GroceryItem } from '@shopping-list/entities/grocery-item.entity';
 import { ShoppingList } from '@shopping-list/entities/shopping-list.entity';
 import type { IAuditable } from '@shared/interfaces/auditable.interface';
 import type { User } from '@shared/entities/user.entity';
+import { ItemCategorizerService } from '../../services/item-categorizer.service';
 
 export class AddGroceryItemCommand implements IAuditable {
   constructor(
@@ -20,9 +21,15 @@ export class AddGroceryItemHandler implements ICommandHandler<AddGroceryItemComm
   constructor(
     @Inject(IShoppingListRepository)
     private readonly repository: ShoppingListRepositoryPort,
+    private readonly categorizer: ItemCategorizerService,
   ) {}
 
   async execute(command: AddGroceryItemCommand): Promise<ShoppingList> {
+    const category = this.categorizer.categorize(command.item.name);
+    if (category) {
+      command.item.category = category;
+    }
+
     const shoppingList = await this.repository.addItemForUser(
       command.id,
       command.user,

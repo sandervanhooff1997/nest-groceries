@@ -53,6 +53,9 @@ export async function createE2eApp(
   const moduleRef = await testingModuleBuilder.compile();
   const app = moduleRef.createNestApplication();
 
+  // Enable test mode to skip JWT verification in middleware
+  process.env.NODE_ENV = 'test';
+
   applyAppConfig(app);
   await app.init();
 

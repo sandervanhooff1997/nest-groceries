@@ -20,6 +20,9 @@ export class GroceryItem {
 
   @Prop({ required: true, min: 0 })
   order: number;
+
+  @Prop()
+  category?: string;
 }
 
 export const groceryItem = SchemaFactory.createForClass(GroceryItem);

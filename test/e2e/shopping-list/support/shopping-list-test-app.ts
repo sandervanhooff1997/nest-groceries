@@ -32,6 +32,7 @@ function withAuthenticatedUser(
 export async function createShoppingListE2eApp(
   options: Pick<CreateE2eAppOptions, 'testFilePath' | 'overrideModule'>,
 ): Promise<E2eAppContext> {
+  process.env.NODE_ENV = 'test';
   return await createE2eApp({
     testFilePath: options.testFilePath,
     overrideModule: (builder) => {

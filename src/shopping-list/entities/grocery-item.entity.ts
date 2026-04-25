@@ -3,7 +3,7 @@ import { GroceryItemUnit } from '../enums/grocery-item-unit.enum';
 
 type GroceryItemSource = Pick<
   GroceryItemSchema,
-  'name' | 'quantity' | 'unit' | 'purchased' | 'order'
+  'name' | 'quantity' | 'unit' | 'purchased' | 'order' | 'category'
 > & {
   _id?: { toString(): string } | string;
 };
@@ -15,6 +15,7 @@ export class GroceryItem {
   unit?: GroceryItemUnit;
   purchased?: boolean;
   order: number;
+  category?: string;
 
   constructor(partial?: Partial<GroceryItem>) {
     Object.assign(this, partial);
@@ -36,6 +37,7 @@ export class GroceryItem {
       unit: document.unit,
       purchased: document.purchased,
       order: document.order,
+      category: document.category,
     });
   }
 }

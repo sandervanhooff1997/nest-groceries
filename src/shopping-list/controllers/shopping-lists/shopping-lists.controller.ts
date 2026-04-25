@@ -38,7 +38,9 @@ export class ShoppingListsController {
   ): Promise<ShoppingListDocument> {
     const shoppingListPayload = new ShoppingList({
       name: shoppingList.name,
-      items: shoppingList.items.map((item) => new GroceryItem(item)),
+      items: shoppingList.items.map(
+        (item, idx) => new GroceryItem({ ...item, order: idx }),
+      ),
       isTemplate: shoppingList.isTemplate ?? false,
     });
 

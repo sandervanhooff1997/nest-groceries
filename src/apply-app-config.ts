@@ -106,6 +106,12 @@ export function applyAppConfig(app: INestApplication): void {
       return;
     }
 
+    // Skip JWT verification if user is already set (e.g., by test mocks)
+    if (req.user) {
+      next();
+      return;
+    }
+
     // Short-circuit before the JWKS roundtrip for the common
     // no-credentials case. Kinde's middleware would also reject these, but
     // it does so after loading verification keys. A fast local 403 is

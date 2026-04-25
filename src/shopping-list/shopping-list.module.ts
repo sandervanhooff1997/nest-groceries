@@ -33,6 +33,9 @@ import { RemoveAccessHandler } from './commands/handlers/remove-access.handler';
 import { FindAllShoppingListsHandler } from './queries/handlers/find-all-shopping-lists.handler';
 import { FindShoppingListByIdHandler } from './queries/handlers/find-shopping-list-by-id.handler';
 
+// Services
+import { ItemCategorizerService } from './services/item-categorizer.service';
+
 const commandHandlers = [
   CreateShoppingListHandler,
   UpdateShoppingListHandler,
@@ -68,6 +71,7 @@ const queryHandlers = [
   ],
   providers: [
     ShoppingListRepository,
+    ItemCategorizerService,
     AuditingCommandBus,
     AuditingQueryBus,
     AuditingEventBus,

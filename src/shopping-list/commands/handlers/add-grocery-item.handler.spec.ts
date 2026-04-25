@@ -9,6 +9,7 @@ import {
   AddGroceryItemCommand,
   AddGroceryItemHandler,
 } from './add-grocery-item.handler';
+import { ItemCategorizerService } from '../../services/item-categorizer.service';
 
 describe('AddGroceryItemHandler', () => {
   const user = UserFactory.create();
@@ -37,7 +38,12 @@ describe('AddGroceryItemHandler', () => {
       reorderItemsForUser: jest.fn(),
       updateItemForUser: jest.fn(),
     };
-    const handler = new AddGroceryItemHandler(repository);
+
+    const categorizer = {
+      categorize: jest.fn().mockReturnValue(null),
+    } as jest.Mocked<ItemCategorizerService>;
+
+    const handler = new AddGroceryItemHandler(repository, categorizer);
 
     const result = await handler.execute(
       new AddGroceryItemCommand('list-id', item, user),
@@ -64,7 +70,12 @@ describe('AddGroceryItemHandler', () => {
       reorderItemsForUser: jest.fn(),
       updateItemForUser: jest.fn(),
     };
-    const handler = new AddGroceryItemHandler(repository);
+
+    const categorizer = {
+      categorize: jest.fn().mockReturnValue(null),
+    } as jest.Mocked<ItemCategorizerService>;
+
+    const handler = new AddGroceryItemHandler(repository, categorizer);
 
     await expect(
       handler.execute(

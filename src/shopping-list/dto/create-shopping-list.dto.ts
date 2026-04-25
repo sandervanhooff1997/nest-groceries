@@ -39,6 +39,11 @@ export class GroceryItemDto {
   @Type(() => Boolean)
   @IsBoolean()
   purchased?: boolean;
+
+  @ApiPropertyOptional({ example: 'fruits_vegetables' })
+  @IsOptional()
+  @IsString()
+  category?: string;
 }
 
 export class CreateShoppingListDto {
